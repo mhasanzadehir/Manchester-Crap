@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Register from "./containers/Register";
+import RegisterPage from "./containers/Register";
 // import { createStore } from 'redux';
 
-ReactDOM.render(<Register />, document.getElementById('root'));
+ReactDOM.render(<RegisterPage />, document.getElementById('root'));
 
 /**
  * This is a reducer, a pure function with (state, action) => state signature.
