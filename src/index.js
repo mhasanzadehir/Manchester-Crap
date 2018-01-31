@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import RegisterPage from "./containers/Register";
-import MainPage from "./containers/MainPage";
 
 // import { createStore } from 'redux';
 

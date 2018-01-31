@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {parseInitializer} from "../init/parsInit";
+
 var Parse = parseInitializer();
 
 class Register extends Component {
@@ -10,85 +11,89 @@ class Register extends Component {
             username: '',
             email: '',
             password: '',
-            error:'',
-            code:'',
-            codeNumberDisplay:'none'
+            error: '',
+            code: '',
+            // codeNumberDisplay:'none'
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.signUp_error = this.signUp_error.bind(this);
+        this.signUp_success = this.signUp_success.bind(this);
+
+
     }
 
-    onChange(e){
+    onChange(e) {
         const state = this.state;
         state[e.target.name] = e.target.value;
         this.setState(state);
     }
 
 
-    onSubmit(e){
+    onSubmit(e) {
         e.preventDefault();
         let user = new Parse.User();
         user.set("username", this.state.username);
         user.set("email", this.state.email);
         user.set("password", this.state.password);
-
         user.signUp(null, {
-            success: function (user) {
-                this.setState({codeNumberDisplay:"block"});
-                // Hooray! Let them use the app now.
+            success: (user) => {
+                this.signUp_success(user)
             },
-            error: function (user, error) {
-                // Show the error message somewhere and let the user try again.
-                this.setState({error: error.message});
+            error: (user, error) => {
+                this.signUp_error(user, error)
             }
         });
 
     }
 
+    signUp_success(user) {
+        this.setState({error: "register complete please log in"});
+        // Hooray! Let trem use tre app now.
+    }
+
+    signUp_error(user, error) {
+        // Show tre error message somewhere and let tre user try again.
+        this.setState({error: error.message});
+    }
 
     render() {
         return (
-            <table>
+            <div>
                 <h1>Register</h1>
                 <form onSubmit={this.onSubmit}>
-                    <th>
-                        <td>username</td>
-                        <td>
-                            <input required="true" type="text" name="username" value={this.state.username} onChange={this.onChange}/>
-                        </td>
-                    </th>
-                    <th>
-                        <td>email</td>
-                        <td>
-                            <input type="email" name="email" value={this.state.email} onChange={this.onChange}/>
-                        </td>
-                    </th>
-                    <th>
-                        <td>password</td>
-                        <td>
-                            <input type="password" name="password" value={this.state.password} onChange={this.onChange}/>
-                        </td>
-                    </th>
-                    <th>
-                        <td>
-                            <button type="submit">Register</button>
-                        </td>
-                    </th>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>username</td>
+                            <td>
+                                <input required="true" type="text" name="username" value={this.state.username}
+                                       onChange={this.onChange}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>
+                                <input type="email" name="email" value={this.state.email} onChange={this.onChange}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>
+                                <input type="password" name="password" value={this.state.password}
+                                       onChange={this.onChange}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="submit">Register</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </form>
                 <p>{this.state.error}</p>
-                <div id="codeNumber" style={{display: this.state.codeNumberDisplay}}>
-                    <th>
-                        We send one number to your email write here
-                    </th>
-                    <th>
-                        <form>
-                            <td>
-                                <input type="code" name="code" value={this.state.code} onChange={this.onChange}/>
-                            </td>
-                        </form>
-                    </th>
-                </div>
-            </table>
+            </div>
         );
     }
 
@@ -99,71 +104,75 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username_email: '',
-            password: ''
+            username: '',
+            password: '',
+            error: ''
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.logIn_success = this.logIn_success.bind(this);
+        this.logIn_error = this.logIn_error.bind(this);
+
     }
 
-    onChange(e){
+    onChange(e) {
         const state = this.state;
         state[e.target.name] = e.target.value;
         this.setState(state);
     }
 
-
-    onSubmit(e){
+    onSubmit(e) {
         e.preventDefault();
-        const {email, password} = this.state;
-        var user = new Parse.User();
-        user.set("username", "MAHDI");
-        user.set("email", email);
-        user.set("password", password);
-
-        user.signUp(null, {
-            success: function (user) {
-
-                // Hooray! Let them use the app now.
-            },
-            error: function (user, error) {
-                // Show the error message somewhere and let the user try again.
-                alert("Error: " + error.code + " " + error.message);
-            }
+        Parse.User.logIn(this.state.username, this.state.password, {
+            success: (user) => this.logIn_success(user),
+            error: (user, error) => this.logIn_error(user, error)
         });
+    }
 
+    logIn_success(user) {
+
+    }
+
+    logIn_error(user, error) {
+        this.setState({error: error.message});
     }
 
 
     render() {
         return (
-            <table>
+            <div>
                 <h1>Log in</h1>
                 <form onSubmit={this.onSubmit}>
-                    <th>
-                        <td>username or email</td>
-                        <td>
-                            <input type="text" name="username_email" value={this.state.username_email} onChange={this.onChange}/>
-                        </td>
-                    </th>
-                    <th>
-                        <td>password</td>
-                        <td>
-                            <input type="password" name="password" value={this.state.password} onChange={this.onChange}/>
-                        </td>
-                    </th>
-                    <th>
-                        <td>
-                            <button type="submit">Login</button>
-                        </td>
-                    </th>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>username</td>
+                            <td>
+                                <input type="text" name="username" value={this.state.username}
+                                       onChange={this.onChange}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>
+                                <input type="password" name="password" value={this.state.password}
+                                       onChange={this.onChange}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="submit">Login</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </form>
-            </table>
+                <p>{this.state.error}</p>
+            </div>
         );
     }
 
 }
-
 
 
 class RegisterPage extends Component {
