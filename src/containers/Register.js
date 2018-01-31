@@ -1,30 +1,8 @@
 import React, {Component} from 'react';
 import "../styles/Register.css"
+import {parseInitializer} from "../init/parsInit";
 
-
-var Parse = require('parse');
-
-Parse.initialize("myAppId123456", '1xoWtDkxw8oZvX3bzhdTuHU7KZB8SGZD9jWQ2V9p');
-Parse.serverURL = 'http://localhost:8030/wp';
-
-let query = new Parse.Query('Monster');
-//query.equalTo('strength', 200);
-var subscription = query.subscribe();
-subscription.on('open', () => {
-    console.log('opened')
-});
-
-subscription.on('create', (object) => {
-    console.log('message added!');
-});
-subscription.on('update', (object) => {
-    console.log('message updated!');
-});
-subscription.on('enter', (object) => {
-    console.log('message deleted!');
-});
-
-
+var Parse = parseInitializer();
 class Register extends Component {
 
     constructor() {
