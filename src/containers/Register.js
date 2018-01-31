@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {parseInitializer} from "../init/parsInit";
+import {Link} from 'react-router'
 
 var Parse = parseInitializer();
 
@@ -130,7 +131,7 @@ class Login extends Component {
     }
 
     logIn_success(user) {
-
+        alert(user.get('username'))
     }
 
     logIn_error(user, error) {
