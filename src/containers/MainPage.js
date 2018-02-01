@@ -24,8 +24,9 @@ class MainPage extends Component {
     }
 }
 
-var GameScore = Parse.Object.extend("Game");
-let query = new Parse.Query(GameScore);
+
+const User = Parse.Object.extend("Game");
+let query = new Parse.Query(User);
 let subscription = query.subscribe();
 
 subscription.on('open', () => {
@@ -34,6 +35,17 @@ subscription.on('open', () => {
 
 subscription.on('create', (object) => {
     console.log('object created');
+     var query = new Parse.Query(User);
+    query.count({
+            success: function(count) {
+                // The count request succeeded. Show the count
+                alert(count + " Users now.");
+            },
+            error: function(error) {
+                alert(error)
+                // The request failed
+            }
+        });
 });
 
 subscription.on('update', (object) => {

@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import {parseInitializer} from "../init/parsInit";
+import {connect} from 'react-redux'
+import {addUserToState} from "../actions";
+
 
 var Parse = parseInitializer();
 
@@ -130,7 +133,7 @@ class Login extends Component {
     }
 
     logIn_success(user) {
-
+        this.props.addUserToState(user);
     }
 
     logIn_error(user, error) {
@@ -188,4 +191,7 @@ class RegisterPage extends Component {
 
 }
 
-export default RegisterPage;
+export default connect(
+    null,
+    {addUserToState: addUserToState}
+)(RegisterPage)
