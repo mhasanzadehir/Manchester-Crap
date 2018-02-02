@@ -9,8 +9,6 @@ class App extends Component {
             <div>
                 <header>
                     <Link to="/RegisterPage">RegisterPage</Link>
-                    <br/>
-                    <Link to="/MainPage">MainPage</Link>
                 </header>
                 <main>
                     <Route exact path="/RegisterPage" component={RegisterPage}/>
