@@ -1,19 +1,18 @@
 import React, {Component} from 'react';
-import {Route , Link} from 'react-router-dom'
+import {Route , Switch} from 'react-router-dom'
 import RegisterPage from './Register'
 import MainPage from './MainPage'
+import GamePage from "./GamePage";
 
 class App extends Component {
     render() {
         return (
             <div>
-                <header>
-                    <Link to="/RegisterPage">RegisterPage</Link>
-                </header>
-                <main>
-                    <Route exact path="/RegisterPage" component={RegisterPage}/>
-                    <Route exact path="/MainPage" component={MainPage}/>
-                </main>
+                <Switch>
+                    <Route exact path='/' component={RegisterPage}/>
+                    <Route path='/MainPage' component={MainPage}/>
+                    <Route path='/GamePage' component={GamePage}/>
+                </Switch>
             </div>
         );
     }

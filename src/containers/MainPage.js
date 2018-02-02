@@ -1,32 +1,45 @@
 import React, {Component} from 'react';
 import {parseInitializer} from "../init/parsInit";
+import {connect} from 'react-redux'
+import {addUserToState} from "../actions";
+import {bindActionCreators} from 'redux'
+import {Redirect} from "react-router";
 
-var Parse = parseInitializer();
+
+let Parse = parseInitializer();
 
 class MainPage extends Component {
-    constructor() {
-        super();
-        this.state = {numOfOnlineUsers: 0}
+    constructor(props) {
+        super(props);
+        if(!this.props.user){
+            window.open("/" , "_self");
+        }
+        this.state = {
+            redirect: false
+        };
+        this.startGame = this.startGame.bind(this);
+    }
+    startGame(){
+        this.setState({redirect: true});
     }
 
     render() {
-        const {numOfOnlineUsers} = this.state;
+        console.log(this.props.user);
+        if (this.state.redirect) {
+            return <Redirect push to="/GamePage" />;
+        }
         return (
             <div>
-                <p>NumOfOnlineUser -> {numOfOnlineUsers}</p>
-                <p onClick={this.onClick}>Click Me</p>
+                <p>Hi {this.props.user.get("username")}</p>
+                <button onClick={this.startGame}>Play Mench</button>
             </div>
         )
-    }
-
-    onClick(){
-
     }
 }
 
 
-const User = Parse.Object.extend("Game");
-let query = new Parse.Query(User);
+const Game = Parse.Object.extend("Game");
+let query = new Parse.Query(Game);
 let subscription = query.subscribe();
 
 subscription.on('open', () => {
@@ -35,17 +48,17 @@ subscription.on('open', () => {
 
 subscription.on('create', (object) => {
     console.log('object created');
-     var query = new Parse.Query(User);
+    let query = new Parse.Query(Game);
     query.count({
-            success: function(count) {
-                // The count request succeeded. Show the count
-                alert(count + " Users now.");
-            },
-            error: function(error) {
-                alert(error)
-                // The request failed
-            }
-        });
+        success: function (count) {
+            // The count request succeeded. Show the count
+            // alert(count + " Users now.");
+        },
+        error: function (error) {
+            // alert(error)
+            // The request failed
+        }
+    });
 });
 
 subscription.on('update', (object) => {
@@ -80,7 +93,18 @@ Parse.LiveQuery.on('error', (error) => {
     console.log(error);
 });
 
-export default MainPage;
+const mapStateToProps = function (state) {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = function (dispatch) {
+    return bindActionCreators({
+        addUserToState
+    }, dispatch);
+};
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
 
 
 
