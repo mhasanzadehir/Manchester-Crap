@@ -4,16 +4,24 @@
   "private": true,
   "dependencies": {
     "history": "latest",
+    "material-ui": "^0.20.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-loading": "^1.0.3",
+    "react-loading-components": "^1.1.12",
+    "react-notifications": "^1.4.3",
+    "react-popup": "^0.9.2",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
     "react-scripts": "1.1.0",
     "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "remote-redux-devtools": "^0.5.12"
+    "remote-redux-devtools": "^0.5.12",
+    "simple-react-form": "^2.0.1",
+    "simple-react-form-material-ui": "^1.7.13"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -22,6 +30,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "redux-devtools": "^3.4.1"
+    "redux-devtools": "^3.4.1",
+    "promise": "latest"
   }
 }

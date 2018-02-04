@@ -1,7 +1,18 @@
 import {parseInitializer} from "../init/parsInit";
 import React , {Component} from "react";
+import {NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import {
+    FIRST_NAME,
+    IS_GUEST_PLAYED, IS_HOME_PLAYED, IS_PEND, PLAYER, POSITION_GUEST, POSITION_HOME, USER,
+    USER_HOME
+} from "../constansts/DBColumn";
 
-var Parse = parseInitializer();
+
+let Parse = parseInitializer();
+const Player = Parse.Object.extend("Player");
+// let query = new Parse.Query(Player);
+
 
 class Register extends Component {
 
@@ -17,10 +28,6 @@ class Register extends Component {
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.signUp_error = this.signUp_error.bind(this);
-        this.signUp_success = this.signUp_success.bind(this);
-
-
     }
 
     onChange(e) {
@@ -38,23 +45,23 @@ class Register extends Component {
         user.set("password", this.state.password);
         user.signUp(null, {
             success: (user) => {
-                this.signUp_success(user)
+                NotificationManager.success(user.get('username'), "register complete please log in");
+                Register.insertPlayer(user);
             },
             error: (user, error) => {
-                this.signUp_error(user, error)
+                NotificationManager.error(error.message);
             }
         });
 
+
     }
 
-    signUp_success(user) {
-        this.setState({error: "register complete please log in"});
-        // Hooray! Let trem use tre app now.
-    }
-
-    signUp_error(user, error) {
-        // Show tre error message somewhere and let tre user try again.
-        this.setState({error: error.message});
+    static insertPlayer(user) {
+        let player = new Player();
+        player.set(USER, user);
+        player.save();
+        user.set(PLAYER, player);
+        user.save();
     }
 
     render() {

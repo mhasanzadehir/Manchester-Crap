@@ -5,15 +5,17 @@ import {BrowserRouter} from 'react-router-dom';
 import store from './store'
 import App from './containers/App'
 import {addUserToState} from "./actions";
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {initializePage} from "./constansts/ActionTypes";
 
+store.dispatch(initializePage());
 
-store.dispatch(addUserToState(null));
 render(
     <Provider store={store}>
         <BrowserRouter>
-            <div>
+            <MuiThemeProvider>
                 <App/>
-            </div>
+            </MuiThemeProvider>
         </BrowserRouter>
     </Provider>,
     document.getElementById('root')

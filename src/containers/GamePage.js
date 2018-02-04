@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
-import Register from "../components/Register";
-import Login from "../components/Login";
 import {addUserToState} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {parseInitializer} from "../init/parsInit";
+import {
+    IS_GUEST_PLAYED, IS_HOME_PLAYED, POSITION_GUEST, POSITION_HOME, USER_GUEST,
+    USER_HOME
+} from "../constansts/DBColumn";
+import {NotificationManager} from 'react-notifications';
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
@@ -20,46 +23,54 @@ class GamePage extends Component {
         this.state = {
             PositionHome: 0,
             PositionGuest: 0,
+            IsPlayed: false,
+            UserHome: '',
+            UserGuest: ''
         };
         this.throwTas = this.throwTas.bind(this);
-        //todo game id should be in redux state
-        query.equalTo("objectId", "VNFGRFATyP");
+
+        query.equalTo("objectId", this.props.gameId);
         subscription = query.subscribe();
         subscription.on('update', (object) => {
             this.setState({
-                PositionHome: object.get('PositionHome'),
-                PositionGuest: object.get('PositionGuest'),
+                PositionHome: object.get(POSITION_HOME),
+                PositionGuest: object.get(POSITION_GUEST),
+                IsPlayed: ((this.props.isHome) ? object.get(IS_HOME_PLAYED) : object.get(IS_GUEST_PLAYED)),
+                UserHome: object.get(USER_HOME).get("username"),
+                UserGuest: object.get(USER_GUEST).get("username")
             })
         });
+
     }
 
 
-
-
     throwTas(){
-        let user = this.props.user;
-        let userId = user.id;
-        let rand = Math.floor((Math.random() * 6) + 1);
         query.first({
-            success: function(object) {
-                let currentPosition = object.get('PositionHome');
-                // noinspection JSAnnotator
-                object.set("PositionHome" , +currentPosition + rand);
+            success: (object) => {
+                let rand = Math.floor((Math.random() * 6) + 1);
+                if (this.props.isHome) {
+                    object.set(POSITION_HOME , +object.get(POSITION_HOME) + rand);
+                    object.set(IS_HOME_PLAYED, true);
+                    object.set(IS_GUEST_PLAYED, false);
+                } else {
+                    object.set(POSITION_GUEST , +object.get(POSITION_GUEST) + rand);
+                    object.set(IS_GUEST_PLAYED, true);
+                    object.set(IS_HOME_PLAYED, false);
+                }
                 object.save();
             },
             error: function(error) {
-                alert("Error: " + error.code + " " + error.message);
+                NotificationManager.error("Error: " + error.code + " " + error.message);
             }
         });
-
     }
 
     render() {
         return (
             <div>
-                <h1 id={"home"}>{this.state.PositionHome}</h1><br/>
-                <h1 id={"guest"}>{this.state.PositionGuest}</h1><br/>
-                <button onClick={this.throwTas}>Tas Bendaz</button>
+                <h1 id={"home"}>{this.state.UserHome}  {this.state.PositionHome}</h1><br/>
+                <h1 id={"guest"}>{this.state.UserGuest} {this.state.PositionGuest}</h1><br/>
+                <button disabled={this.state.IsPlayed} onClick={this.throwTas}>Tas Bendaz</button>
             </div>
         );
     }
@@ -68,8 +79,11 @@ class GamePage extends Component {
 
 
 const mapStateToProps = function (state) {
+    console.log(state);
     return {
-        user: state.user
+        user: state.user,
+        gameId: state.gameId,
+        isHome: state.isHome
     };
 };
 

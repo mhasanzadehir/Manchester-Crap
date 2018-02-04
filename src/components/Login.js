@@ -3,7 +3,10 @@ import {parseInitializer} from "../init/parsInit";
 import {connect} from 'react-redux'
 import {addUserToState} from "../actions";
 import {bindActionCreators} from 'redux'
-import { Redirect } from 'react-router';
+import {Redirect} from 'react-router';
+import {NotificationManager} from 'react-notifications';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 let Parse = parseInitializer();
@@ -15,13 +18,10 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            error: '',
             redirect: false
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.logIn_success = this.logIn_success.bind(this);
-        this.logIn_error = this.logIn_error.bind(this);
     }
 
     onChange(e) {
@@ -33,56 +33,45 @@ class Login extends Component {
     onSubmit(e) {
         e.preventDefault();
         Parse.User.logIn(this.state.username, this.state.password, {
-            success: (user) => this.logIn_success(user),
-            error: (user, error) => this.logIn_error(user, error)
+            success: (user) => {
+                NotificationManager.success("salam", "salam");
+                this.props.addUserToState(user);
+                this.setState({redirect: true});
+            },
+            error: (user, error) => {
+                NotificationManager.error(error.message);
+            }
         });
-    }
-
-    logIn_success(user) {
-        this.props.addUserToState(user);
-        console.log(this.props.user);
-        // window.open("/MainPage" , "_self")
-        this.setState({redirect: true});
-    }
-
-    logIn_error(user, error) {
-        this.setState({error: error.message});
     }
 
     render() {
         if (this.state.redirect) {
-            return <Redirect push to="/MainPage" />;
+            return <Redirect push to="/MainPage"/>;
         }
         return (
             <div>
-
                 <h1>Log in</h1>
                 <form onSubmit={this.onSubmit}>
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td>username</td>
-                            <td>
-                                <input type="text" name="username" value={this.state.username}
-                                       onChange={this.onChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>password</td>
-                            <td>
-                                <input type="password" name="password" value={this.state.password}
-                                       onChange={this.onChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button type="submit">Log In</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <TextField
+                        name="username"
+                        hintText="Username"
+                        floatingLabelText="Username"
+                        onChange={this.onChange}
+                    />
+                    <br/>
+                    <TextField
+                        name="password"
+                        hintText="Password"
+                        floatingLabelText="Password"
+                        type="password"
+                        onChange={this.onChange}
+                    />
+                    <br/>
+                    <RaisedButton
+                        label="Log In"
+                        type="submit"
+                        primary={true}/>
                 </form>
-                <p>{this.state.error}</p>
             </div>
         );
     }
@@ -98,6 +87,6 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = function (dispatch) {
     return bindActionCreators({
         addUserToState
-    } , dispatch);
+    }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
