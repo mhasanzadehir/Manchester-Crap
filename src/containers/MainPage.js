@@ -5,7 +5,7 @@ import {addGameIdToState, addIsHomeToState, addUserToState} from "../actions";
 import {bindActionCreators} from 'redux'
 import {Redirect} from "react-router";
 import {
-    BIRTHDATE, CITY, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, PLAYER, USER, USER_HOME,
+    BIRTHDATE, CITY, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, PLAYER, SCORE, USER, USER_HOME,
     USER_NAME
 } from "../constansts/DBColumn";
 import {USER_GUEST} from "../constansts/DBColumn";
@@ -17,6 +17,7 @@ import {IS_GUEST_PLAYED} from "../constansts/DBColumn";
 import ProfileInfo from "../components/ProfileInfo";
 import "../App.css"
 import ReactLoading from 'react-loading';
+import PlayerLeaderBoard from "../components/PlayerLeaderBoard";
 
 
 let Parse = parseInitializer();
@@ -38,12 +39,15 @@ class MainPage extends Component {
             redirect: false,
             showPopup: false,
             isLoading:false,
-            gameId: null
+            gameId: null,
+            leaderBoardPopUp : false,
+            leaderBoardData : null
         };
         // this.setPlayerToState();
         this.startGame = this.startGame.bind(this);
         this.editProfile = this.editProfile.bind(this);
         this.hostGame = this.hostGame.bind(this);
+        this.showLeaderBoard = this.showLeaderBoard.bind(this);
 
         let query = new Parse.Query(Game);
         subscription = query.subscribe();
@@ -56,6 +60,7 @@ class MainPage extends Component {
         });
 
     }
+
 
     startGame() {
         let query = new Parse.Query(Game);
@@ -89,6 +94,22 @@ class MainPage extends Component {
         });
     }
 
+    showLeaderBoard() {
+        let query = new Parse.Query(Player);
+        query.descending(SCORE);
+        query.find({
+            success: (object) => {
+                console.log(object);
+                this.setState({ leaderBoardData: object, leaderBoardPopUp: !this.state.leaderBoardPopUp });
+            }
+            ,
+            error: function (error) {
+                alert("Error: " + error.code + " " + error.message);
+            }
+        });
+
+    }
+
     setPlayerToState() {
         let query = new Parse.Query(Player);
         query.equalTo(USER, this.props.user);
@@ -119,7 +140,7 @@ class MainPage extends Component {
             success:(game) => {
                 this.props.addGameIdToState(game.id);
                 this.props.addIsHomeToState(true);
-                alert("You hosted");
+                // alert("You hosted");
                 this.setState({isLoading: true, gameId: game.id});
             },
             error: function (gameScore, error) {
@@ -138,6 +159,7 @@ class MainPage extends Component {
                 <p>Hi {this.props.user.username}</p>
                 <button onClick={this.startGame}>Play Mench</button>
                 <button onClick={this.editProfile}>Edit Your Profile</button>
+                <button onClick={this.showLeaderBoard}>Leader Board</button>
                 {this.state.isLoading?<ReactLoading type="spinningBubbles" color="black"/>:null}
                 {this.state.showPopup ?
                     <Popup
@@ -145,6 +167,13 @@ class MainPage extends Component {
                         closePopup={this.editProfile.bind(this)}>
                         <ProfileInfo player={this.state.player} onSubmit={this.saveProfileInfo}/>
 
+                    </Popup> : null}
+
+                {this.state.leaderBoardPopUp ?
+                    <Popup
+                        text='Close Me'
+                        closePopup={this.showLeaderBoard.bind(this)}>
+                        <PlayerLeaderBoard players={this.state.leaderBoardData}/>
                     </Popup> : null}
             </div>
         )
