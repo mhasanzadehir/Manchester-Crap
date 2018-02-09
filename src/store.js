@@ -2,7 +2,7 @@ import {createStore, applyMiddleware, compose} from 'redux'
 import thunk from 'redux-thunk'
 // import createHistory from 'history/createBrowserHistory'
 import rootReducer from './reducers'
-import {defaultState, INIT_PAGE, resetState} from "./constansts/ActionTypes";
+import {defaultState} from "./constansts/ActionTypes";
 import {APP_NAME} from "./constansts/AppDetail";
 // import {APP_NAME} from "./constansts/AppDetail";
 // import {INIT_PAGE, resetState} from "./constansts/ActionTypes";
@@ -58,6 +58,8 @@ import {APP_NAME} from "./constansts/AppDetail";
 //     }
 // }
 //
+//todo clear this line
+localStorage.removeItem(APP_NAME);
 let storedState;
 let serializedState = localStorage.getItem(APP_NAME);
 if (serializedState != null) {
@@ -65,6 +67,7 @@ if (serializedState != null) {
 } else {
     storedState = defaultState();
 }
+console.log(storedState);
 
 const composedEnhancers = compose(
     applyMiddleware(thunk),

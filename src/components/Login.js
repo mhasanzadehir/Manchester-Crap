@@ -8,14 +8,15 @@ import {NotificationManager} from 'react-notifications';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextFields from "./TextFields";
-
+import Dialog from 'material-ui/Dialog';
+import {FlatButton} from "material-ui";
 
 let Parse = parseInitializer();
 
 class Login extends Component {
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             username: '',
             password: '',
@@ -50,8 +51,28 @@ class Login extends Component {
             return <Redirect push to="/MainPage"/>;
         }
         return (
-            <div>
-                <h1>Log in</h1>
+            <Dialog
+                title="Sign In"
+                autoScrollBodyContent={true}
+                actions={
+                    <div>
+                        <RaisedButton
+                            label="Cancel"
+                            primary={true}
+                            // onClick={this.handleClose}
+                        />
+                        <FlatButton
+                            label="Submit"
+                            primary={true}
+                            keyboardFocused={true}
+                            // onClick={this.handleClose}
+                        />
+                    </div>
+                }
+                modal={false}
+                open={this.props.signInForm}
+                onRequestClose={() => this.setState({logInForm: false})}
+            >
                 <form onSubmit={this.onSubmit}>
                     <TextFields fieldList={["username", "password"]} onChange={this.onChange} state={this.state}/>
                     <RaisedButton
@@ -59,7 +80,7 @@ class Login extends Component {
                         type="submit"
                         primary={true}/>
                 </form>
-            </div>
+            </Dialog>
         );
     }
 

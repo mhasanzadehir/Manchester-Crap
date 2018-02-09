@@ -1,7 +1,6 @@
 import * as type from '../constansts/ActionTypes'
 
 export default function (state = null , action) {
-    console.log(state);
     switch (action.type){
         case type.ADD_GAME_ID:
             return {

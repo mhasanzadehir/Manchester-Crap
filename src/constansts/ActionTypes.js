@@ -5,48 +5,59 @@ export const ADD_USER = 'ADD_USER';
 export const ADD_GAME_ID = 'ADD_GAME_ID';
 export const ADD_IS_HOME = 'ADD_IS_HOME';
 export const INIT_PAGE = 'INIT_PAGE';
-export const RESET_STATE = 'RESET_STATE';
+export const ADD_SNACK_TEXT = 'ADD_SNACK_TEXT';
+export const CLOSE_SNACK_TEXT = 'CLOSE_SNACK_TEXT';
+
 
 export function addUserToStateUnsafe(user) {
-    return{
+    return {
         type: ADD_USER,
         user
     };
 }
 
 export function addGameIdToStateUnsafe(gameId) {
-    return{
+    return {
         type: ADD_GAME_ID,
         gameId
     };
 }
 
 export function addIsHomeToStateUnsafe(isHome) {
-    return{
+    return {
         type: ADD_IS_HOME,
         isHome
     };
 }
 
+export function addSnackTextUnsafe(text) {
+    return {
+        type: ADD_SNACK_TEXT,
+        text
+    }
+}
+
+export function closeSnackTextUnsafe() {
+    return {
+        type: CLOSE_SNACK_TEXT
+    }
+}
+
 export function initializePage() {
-    return{
+    return {
         type: INIT_PAGE
     };
 }
 
-export function resetState(state) {
-    return{
-        type: RESET_STATE,
-        state
-    }
-}
-
 export function defaultState() {
-    return{
+    return {
         user: null,
         game: null,
         player: null,
-        pageStatus: null,
+        pageStatus: {
+            snackText: "",
+            snackIsOpen: false,
+        }
     }
 }
 
