@@ -7,6 +7,7 @@ import {Redirect} from 'react-router';
 import {NotificationManager} from 'react-notifications';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextFields from "./TextFields";
 
 
 let Parse = parseInitializer();
@@ -52,21 +53,7 @@ class Login extends Component {
             <div>
                 <h1>Log in</h1>
                 <form onSubmit={this.onSubmit}>
-                    <TextField
-                        name="username"
-                        hintText="Username"
-                        floatingLabelText="Username"
-                        onChange={this.onChange}
-                    />
-                    <br/>
-                    <TextField
-                        name="password"
-                        hintText="Password"
-                        floatingLabelText="Password"
-                        type="password"
-                        onChange={this.onChange}
-                    />
-                    <br/>
+                    <TextFields fieldList={["username", "password"]} onChange={this.onChange} state={this.state}/>
                     <RaisedButton
                         label="Log In"
                         type="submit"

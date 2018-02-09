@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
 import user from './user'
-import gameId from './gameId'
-import isHome from './isHome'
-import { routerReducer } from 'react-router-redux'
+import game from './game'
+import player from './player'
+import pageStatus from './pageStatus'
 
+let combineReducer = combineReducers({
+    user, game, player, pageStatus
+});
 
-export default combineReducers({
-    router: routerReducer,
-    user,gameId,isHome
-})
+export default combineReducer

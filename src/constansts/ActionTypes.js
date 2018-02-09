@@ -1,3 +1,6 @@
+import {APP_NAME} from "./AppDetail";
+import store from "../store";
+
 export const ADD_USER = 'ADD_USER';
 export const ADD_GAME_ID = 'ADD_GAME_ID';
 export const ADD_IS_HOME = 'ADD_IS_HOME';
@@ -36,4 +39,18 @@ export function resetState(state) {
         type: RESET_STATE,
         state
     }
+}
+
+export function defaultState() {
+    return{
+        user: null,
+        game: null,
+        player: null,
+        pageStatus: null,
+    }
+}
+
+export function saveStore() {
+    //todo test it
+    localStorage.setItem(APP_NAME, JSON.stringify(store));
 }

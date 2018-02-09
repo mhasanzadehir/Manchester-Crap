@@ -59,6 +59,7 @@ class Register extends Component {
     static insertPlayer(user) {
         let player = new Player();
         player.set(USER, user);
+        console.log("player added" , player);
         player.save();
         user.set(PLAYER, player);
         user.save();

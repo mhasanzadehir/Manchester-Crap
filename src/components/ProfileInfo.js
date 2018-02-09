@@ -12,9 +12,11 @@ import {
 import TextField from 'material-ui/TextField';
 import {RaisedButton, Toggle} from "material-ui";
 import DatePicker from 'material-ui/DatePicker';
+import TextFields from "./TextFields";
 
 
 let Parse = parseInitializer();
+const Player = Parse.Object.extend("Player");
 // const Player = Parse.Object.extend("Player");
 
 // let query = new Parse.Query(Player);
@@ -32,6 +34,11 @@ class ProfileInfo extends Component {
             gender: player.get(GENDER),
             birthDate: player.get(BIRTHDATE)
         };
+
+        this.onChange = this.onChange.bind(this);
+        this.handleToggle = this.handleToggle.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+        this.handleChangeDate = this.handleChangeDate.bind(this);
     }
 
     handleToggle = (event, toggled) => {
@@ -50,7 +57,23 @@ class ProfileInfo extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.props.onSumbit(this.state);
+        let user = this.props.player.get(USER);
+        let pQuery = new Parse.Query(Player);
+        pQuery.equalTo(USER, user);
+        pQuery.first({
+            success: (object) => {
+                object.set(FIRST_NAME, this.state.firstName);
+                object.set(LAST_NAME, this.state.lastName);
+                object.set(CITY, this.state.city);
+                object.set(BIRTHDATE, this.state.birthDate);
+                object.set(GENDER, this.state.gender);
+                object.save();
+            }
+            ,
+            error: function (error) {
+                alert("Error: " + error.code + " " + error.message);
+            }
+        });
     }
 
     handleChangeDate = (event, date) => {
@@ -63,35 +86,7 @@ class ProfileInfo extends Component {
             <div>
                 <h1>Edit Profile</h1>
                 <form onSubmit={this.onSubmit}>
-                    <TextField
-                        name="userName"
-                        value={this.state.userName}
-                        floatingLabelText="Username"
-                        onChange={this.onChange}
-                        disabled={true}
-                    />
-                    <br/>
-                    <TextField
-                        name="firstName"
-                        value={this.state.firstName}
-                        floatingLabelText="FirstName"
-                        onChange={this.onChange}
-                    />
-                    <br/>
-                    <TextField
-                        name="lastName"
-                        value={this.state.lastName}
-                        floatingLabelText="LastName"
-                        onChange={this.onChange}
-                    />
-                    <br/>
-                    <TextField
-                        name="city"
-                        value={this.state.city}
-                        floatingLabelText="City"
-                        onChange={this.onChange}
-                    />
-                    <br/>
+                    <TextFields fieldList={["const_userName", "firstName","lastName","city"]} onChange={this.onChange}  state={this.state}/>
                     <Toggle
                         name="gender"
                         value="autoOk"
