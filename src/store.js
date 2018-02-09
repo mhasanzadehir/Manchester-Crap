@@ -71,7 +71,7 @@ console.log(storedState);
 
 const composedEnhancers = compose(
     applyMiddleware(thunk),
-    window.devToolsExtension(),
+    // window.devToolsExtension(),
 );
 export default createStore(rootReducer, storedState, composedEnhancers);
 // export default createStore(rootReducer, applyMiddleware(thunk));

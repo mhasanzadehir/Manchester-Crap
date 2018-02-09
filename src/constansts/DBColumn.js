@@ -20,6 +20,9 @@ export const GENDER = 'Gender';
 export const BIRTHDATE = 'BirthDate';
 export const CITY = 'City';
 export const USER = 'User';
+export const AVATAR = 'Image';
+export const SCORE = 'Score';
+
 
 /**
  * User Table Columns
