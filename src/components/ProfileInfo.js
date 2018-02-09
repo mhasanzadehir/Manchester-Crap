@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import {
-    BIRTHDATE,
+    BIRTH_DATE,
     CITY,
     FIRST_NAME, GENDER,
     IS_GUEST_PLAYED, IS_HOME_PLAYED, IS_PEND, LAST_NAME, PLAYER, POSITION_GUEST, POSITION_HOME, USER,
@@ -17,7 +17,7 @@ import TextFields from "./TextFields";
 
 let Parse = parseInitializer();
 const Player = Parse.Object.extend("Player");
-// const Player = Parse.Object.extend("Player");
+const Game = Parse.Object.extend("Game");
 
 // let query = new Parse.Query(Player);
 
@@ -32,7 +32,7 @@ class ProfileInfo extends Component {
             lastName: player.get(LAST_NAME),
             city: player.get(CITY),
             gender: player.get(GENDER),
-            birthDate: player.get(BIRTHDATE)
+            birthDate: player.get(BIRTH_DATE)
         };
 
         this.onChange = this.onChange.bind(this);
@@ -65,7 +65,7 @@ class ProfileInfo extends Component {
                 object.set(FIRST_NAME, this.state.firstName);
                 object.set(LAST_NAME, this.state.lastName);
                 object.set(CITY, this.state.city);
-                object.set(BIRTHDATE, this.state.birthDate);
+                object.set(BIRTH_DATE, this.state.birthDate);
                 object.set(GENDER, this.state.gender);
                 object.save();
             }

@@ -1,17 +1,19 @@
 import React, {Component} from 'react';
 import {Route, Switch} from 'react-router-dom'
-import RegisterPage from './Register'
-import MainPage from './MainPage'
-import GamePage from "./GamePage";
 import 'react-notifications/lib/notifications.css';
 import {APP_NAME} from "../constansts/AppDetail";
 import AppBar from 'material-ui/AppBar';
 import {Dialog, Drawer, FlatButton, MenuItem, RaisedButton, Snackbar, TextField} from "material-ui";
 import Logged from "../components/Logged";
-import {parseSignIn} from "../init/parsInit";
-import {addSnackText, closeSnackText} from "../actions";
+import {getPlayer, getUser, parseSignIn, parseSignUp} from "../init/parsInit";
+import {addPlayerToState, addSnackText, addUserToState, closeSnackText, saveStore} from "../actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
+import {OBJECT_ID, PLAYER, USER_NAME} from "../constansts/DBColumn";
+import MainPage from "./MainPage";
+import GamePage from "./GamePage";
+import {Redirect} from "react-router";
+import store from "../store";
 
 
 class App extends Component {
@@ -34,9 +36,10 @@ class App extends Component {
         };
         this.onLeftIconButtonClick = this.onLeftIconButtonClick.bind(this);
         this.onRightIconButtonClick = this.onRightIconButtonClick.bind(this);
-        this.signOnChange = this.signOnChange.bind(this);
+        this.signInOnChange = this.signInOnChange.bind(this);
+        this.signUpOnChange = this.signUpOnChange.bind(this);
         this.signUpSubmit = this.signUpSubmit.bind(this);
-        this.singInSuccess = this.singInSuccess.bind(this);
+        this.signSuccess = this.signSuccess.bind(this);
     }
 
     onLeftIconButtonClick() {
@@ -45,9 +48,16 @@ class App extends Component {
         })
     }
 
-    signOnChange(event) {
+    signInOnChange(event) {
         const state = this.state;
         state.signIn[event.target.name] = event.target.value;
+        this.setState(state);
+        console.log(this.props.snackText)
+    }
+
+    signUpOnChange(event) {
+        const state = this.state;
+        state.signUp[event.target.name] = event.target.value;
         this.setState(state);
         console.log(this.props.snackText)
     }
@@ -56,7 +66,15 @@ class App extends Component {
 
     }
 
-    singInSuccess(user) {
+    signSuccess(user) {
+        console.log(user.get(USER_NAME));
+        this.setState({
+            signed: true,
+            signIn: {form: false},
+            signUp: {form: false},
+        });
+        this.props.addUserToState(getUser(user.id), this.props.snackText);
+        this.props.addPlayerToState(getPlayer(user.get(PLAYER).id), this.props.snackText);
         // this.props.addUserToState(user);
         // this.setState({redirect: true});
         // event.preventDefault();
@@ -115,9 +133,8 @@ class App extends Component {
                                 primary={true}
                                 onClick={() => {
                                     parseSignIn(
-                                        this.state.signIn.username,
-                                        this.state.signIn.password,
-                                        this.singInSuccess,
+                                        this.state.signIn,
+                                        this.signSuccess,
                                         this.props.addSnackText)
                                 }}
                             />
@@ -131,7 +148,7 @@ class App extends Component {
                         name="username"
                         hintText="Username"
                         floatingLabelText="Username"
-                        onChange={this.signOnChange}
+                        onChange={this.signInOnChange}
                         type="text"
                         value={this.state.signIn.username}
                     />
@@ -139,7 +156,7 @@ class App extends Component {
                         name="password"
                         hintText="Password"
                         floatingLabelText="Password"
-                        onChange={this.signOnChange}
+                        onChange={this.signInOnChange}
                         type="password"
                         value={this.state.signIn.password}
                     />
@@ -167,7 +184,12 @@ class App extends Component {
                             <RaisedButton
                                 label="Sign Up"
                                 primary={true}
-                                // onClick={this.handleClose}
+                                onClick={() => {
+                                    parseSignUp(
+                                        this.state.signUp,
+                                        this.signSuccess,
+                                        this.props.addSnackText)
+                                }}
                             />
                         </div>
                     }
@@ -180,7 +202,7 @@ class App extends Component {
                         name="username"
                         hintText="Username"
                         floatingLabelText="Username"
-                        onChange={this.signOnChange}
+                        onChange={this.signUpOnChange}
                         type="text"
                         value={this.state.signUp.username}
                     />
@@ -188,7 +210,7 @@ class App extends Component {
                         name="email"
                         hintText="Email"
                         floatingLabelText="Email"
-                        onChange={this.signOnChange}
+                        onChange={this.signUpOnChange}
                         type="email"
                         value={this.state.signUp.email}
                     />
@@ -196,13 +218,28 @@ class App extends Component {
                         name="password"
                         hintText="Password"
                         floatingLabelText="Password"
-                        onChange={this.signOnChange}
+                        onChange={this.signUpOnChange}
                         type="password"
                         value={this.state.signUp.password}
                     />
+                    <FlatButton
+                        label="Sign In"
+                        onClick={() => {
+                            this.setState({signUp: {form: false}});
+                            this.setState({signIn: {form: true}});
+                        }
+                        }/>
                 </Dialog>
+                {
+                    this.state.signed?
+                        <RaisedButton
+                        label="OpenGame"
+                        primary={true}
+                        onClick={() => window.open("/MainPage" , "_self")}
+                        />:
+                        null
+                }
                 <Switch>
-                    <Route exact path='/' component={RegisterPage}/>
                     <Route path='/MainPage' component={MainPage}/>
                     <Route path='/GamePage' component={GamePage}/>
                 </Switch>
@@ -227,7 +264,9 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = function (dispatch) {
     return bindActionCreators({
         addSnackText: addSnackText,
-        closeSnackText: closeSnackText
+        closeSnackText: closeSnackText,
+        addUserToState: addUserToState,
+        addPlayerToState: addPlayerToState,
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

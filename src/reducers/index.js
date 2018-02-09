@@ -7,5 +7,4 @@ import pageStatus from './pageStatus'
 let combineReducer = combineReducers({
     user, game, player, pageStatus
 });
-
 export default combineReducer

@@ -14,10 +14,11 @@ export const IS_GUEST_PLAYED = 'IsGuestPlayed';
  * Player Table Columns
  * @type {string}
  */
+export const OBJECT_ID = "objectId";
 export const FIRST_NAME = 'FirstName';
 export const LAST_NAME = 'LastName';
 export const GENDER = 'Gender';
-export const BIRTHDATE = 'BirthDate';
+export const BIRTH_DATE = 'BirthDate';
 export const CITY = 'City';
 export const USER = 'User';
 export const AVATAR = 'Image';
@@ -30,6 +31,9 @@ export const SCORE = 'Score';
  */
 export const USER_NAME = 'username';
 export const PLAYER = 'player';
+export const EMAIL = 'email';
+export const PASSWORD = 'password';
+
 
 
 

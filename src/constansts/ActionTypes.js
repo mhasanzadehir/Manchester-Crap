@@ -1,18 +1,21 @@
-import {APP_NAME} from "./AppDetail";
-import store from "../store";
-
 export const ADD_USER = 'ADD_USER';
+export const ADD_PLAYER = 'ADD_PLAYER';
 export const ADD_GAME_ID = 'ADD_GAME_ID';
 export const ADD_IS_HOME = 'ADD_IS_HOME';
-export const INIT_PAGE = 'INIT_PAGE';
 export const ADD_SNACK_TEXT = 'ADD_SNACK_TEXT';
 export const CLOSE_SNACK_TEXT = 'CLOSE_SNACK_TEXT';
-
 
 export function addUserToStateUnsafe(user) {
     return {
         type: ADD_USER,
         user
+    };
+}
+
+export function addPlayerToStateUnsafe(player) {
+    return {
+        type: ADD_PLAYER,
+        player
     };
 }
 
@@ -43,12 +46,6 @@ export function closeSnackTextUnsafe() {
     }
 }
 
-export function initializePage() {
-    return {
-        type: INIT_PAGE
-    };
-}
-
 export function defaultState() {
     return {
         user: null,
@@ -61,7 +58,3 @@ export function defaultState() {
     }
 }
 
-export function saveStore() {
-    //todo test it
-    localStorage.setItem(APP_NAME, JSON.stringify(store));
-}

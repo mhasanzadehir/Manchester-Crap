@@ -5,11 +5,10 @@ import {BrowserRouter} from 'react-router-dom';
 import store from './store'
 import App from './containers/App'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {initializePage} from "./constansts/ActionTypes";
-
-store.dispatch(initializePage());
+import {APP_NAME} from "./constansts/AppDetail";
 
 function render() {
+    localStorage.setItem(APP_NAME, JSON.stringify(store.getState()));
     ReactDOM.render(
         <Provider store={store}>
             <BrowserRouter>

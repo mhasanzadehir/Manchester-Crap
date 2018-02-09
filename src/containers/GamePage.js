@@ -15,8 +15,8 @@ let query = new Parse.Query(Game);
 let subscription;
 
 class GamePage extends Component {
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
         if(!this.props.user){
             window.open("/" , "_self");
         }

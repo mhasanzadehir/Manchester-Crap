@@ -5,7 +5,7 @@ import {addGameIdToState, addIsHomeToState, addUserToState} from "../actions";
 import {bindActionCreators} from 'redux'
 import {Redirect} from "react-router";
 import {
-    BIRTHDATE, CITY, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, PLAYER, SCORE, USER, USER_HOME,
+    BIRTH_DATE, CITY, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, PLAYER, SCORE, USER, USER_HOME,
     USER_NAME
 } from "../constansts/DBColumn";
 import {USER_GUEST} from "../constansts/DBColumn";

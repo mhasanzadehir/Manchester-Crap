@@ -59,7 +59,6 @@ import {APP_NAME} from "./constansts/AppDetail";
 // }
 //
 //todo clear this line
-localStorage.removeItem(APP_NAME);
 let storedState;
 let serializedState = localStorage.getItem(APP_NAME);
 if (serializedState != null) {
@@ -71,7 +70,7 @@ console.log(storedState);
 
 const composedEnhancers = compose(
     applyMiddleware(thunk),
-    // window.devToolsExtension(),
+    window.devToolsExtension(),
 );
 export default createStore(rootReducer, storedState, composedEnhancers);
 // export default createStore(rootReducer, applyMiddleware(thunk));
