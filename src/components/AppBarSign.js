@@ -10,12 +10,20 @@ import {connect} from "react-redux";
 import {FlatButton} from "material-ui";
 import {APP_NAME} from "../constansts/AppDetail";
 
+const flatButtonLabelStyle = {
+    color: 'white',
+    fontSize: '20px'
+};
+const flatButtonDivStyle = {
+    padding : '5px'
+};
 
 class AppBarSign extends Component {
     constructor() {
         super();
         this.state = {};
         this.signOut = this.signOut.bind(this);
+
     }
 
     signOut() {
@@ -27,11 +35,11 @@ class AppBarSign extends Component {
     render() {
         if (!this.props.signed) {
             return (
-                <div>
-                    <FlatButton style={{color: "white"}} onClick={() => {
+                <div style={flatButtonDivStyle} >
+                    <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
                         this.props.showDialog("signUp")
                     }} label="Sign Up"/>
-                    <FlatButton style={{color: "white"}} onClick={() => {
+                    <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
                         this.props.showDialog("signIn")
                     }} label="Sign In"/>
                 </div>
@@ -42,7 +50,8 @@ class AppBarSign extends Component {
         return (
             <div>
                 <FlatButton
-                    style={{color: "white"}}
+                    onClick={()=>{window.open('/userPage', '_self')}}
+                    labelStyle={flatButtonLabelStyle}
                     label="Open Game"/>
                 <IconMenu
                     iconButtonElement={
@@ -55,7 +64,7 @@ class AppBarSign extends Component {
                 >
                     <MenuItem
                         onClick={() => {this.props.showDialog("editProfile")}}
-                        primaryText="Edit profile info"/>
+                        primaryText="Edit profile"/>
                     <MenuItem
                         onClick={() => {this.signOut()}}
                         primaryText="Sign out"/>
