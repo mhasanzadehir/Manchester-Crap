@@ -1,1 +1,1 @@
-export const APP_NAME = 'Manchester-Crap';
+export const APP_NAME = 'Snake Pass';

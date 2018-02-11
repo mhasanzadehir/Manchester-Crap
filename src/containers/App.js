@@ -33,6 +33,7 @@ class App extends Component {
             <div>
                 <AppBar
                     title={APP_NAME}
+                    style={{backgroundColor : ' #EE3F0C'}}
                     onLeftIconButtonClick={() => {
                         this.props.setLeftDrawer(true)
                     }}

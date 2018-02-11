@@ -21,7 +21,7 @@ export const GENDER = 'Gender';
 export const BIRTH_DATE = 'BirthDate';
 export const CITY = 'City';
 export const USER = 'User';
-export const AVATAR = 'Image';
+export const AVATAR = 'Avatar';
 export const SCORE = 'Score';
 
 
