@@ -24,6 +24,10 @@ class EditProfileDialog extends Component {
         this.submit = this.submit.bind(this);
     }
     componentDidMount(){
+        this.getUserState();
+    }
+
+    getUserState() {
         this.setState({
             id: this.props.user.id,
             firstName: this.props.user.firstName,
@@ -60,6 +64,9 @@ class EditProfileDialog extends Component {
     }
 
     render() {
+        if (this.state.id !== this.props.user.id){
+            this.getUserState();
+        }
         return (
             <Dialog
                 contentStyle={{textAlign: "center", width: "350px"}}
@@ -117,7 +124,7 @@ class EditProfileDialog extends Component {
                 <RadioButtonGroup
                     onChange={this.onChangeGender}
                     name="gender"
-                    defaultSelected={this.state.gender.toString()}
+                    defaultSelected={this.state.gender === undefined ? null : this.state.gender.toString()}
                     style={{width: "80%" , textAline:"center" , marginLeft:"20%"}}>
                     <RadioButton
                         value="true"

@@ -5,7 +5,7 @@ import {
 
 const APP_ID = "myAppId123456";
 const JAVASCRIPT_KEY = '1xoWtDkxw8oZvX3bzhdTuHU7KZB8SGZD9jWQ2V9p';
-const SERVER_URL = 'http://172.20.10.2:8030/wp';
+const SERVER_URL = 'http://localhost:8030/wp';
 
 export function parseInitializer() {
     let Parse = require('parse');

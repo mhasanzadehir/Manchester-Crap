@@ -24,9 +24,9 @@ class App extends Component {
         this.state = {};
     }
 
-    componentDidMount(){
-        if (!this.props.signed && window.location.pathname !== "/"){
-            window.open("/" , "_self");
+    componentDidMount() {
+        if (!this.props.signed && window.location.pathname !== "/") {
+            window.open("/", "_self");
         }
     }
     render() {
@@ -45,9 +45,10 @@ class App extends Component {
                 <SignUpDialog/>
                 <EditProfileDialog/>
                 <Switch>
-                    <Route path='/' component={UserPage}/>
-                    <Route path='/GamePage' component={GamePage}/>
+                    <Route exact path="/" component={MainPage}/>
+                    <Route path="/GamePage" component={GamePage}/>
                     <Route path='/UserPage' component={UserPage}/>
+                    <Route render={() => <h1>Page not found</h1>}/>
                 </Switch>
                 <Snackbar
                     open={this.props.snackIsOpen}

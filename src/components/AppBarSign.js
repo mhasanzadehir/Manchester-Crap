@@ -50,7 +50,7 @@ class AppBarSign extends Component {
         return (
             <div>
                 <FlatButton
-                    onClick={()=>{window.open('/userPage', '_self')}}
+                    onClick={()=>{window.open('/UserPage', '_self')}}
                     labelStyle={flatButtonLabelStyle}
                     label="Open Game"/>
                 <IconMenu
