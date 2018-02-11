@@ -15,6 +15,7 @@ import SignInDialog from "../components/SignInDialog";
 import SignUpDialog from "../components/SignUpDialog";
 import LeftDrawer from "../components/LeftDrawer";
 import EditProfileDialog from "../components/EditProfileDialog";
+import UserPage from "./UserPage";
 
 
 class App extends Component {
@@ -46,6 +47,7 @@ class App extends Component {
                 <Switch>
                     <Route path='/' component={MainPage}/>
                     <Route path='/GamePage' component={GamePage}/>
+                    <Route path='/UserPage' component={UserPage}/>
                 </Switch>
                 <Snackbar
                     open={this.props.snackIsOpen}

@@ -28,11 +28,11 @@ let subscription;
 
 
 class MainPage extends Component {
-    constructor(props) {
-        super(props);
-        if (!this.props.user) {
-            window.open("/", "_self");
-        }
+    constructor() {
+        super();
+        // if (!this.props.user) {
+        //     window.open("/", "_self");
+        // }
 
         this.state = {
             player : null,
@@ -140,7 +140,6 @@ class MainPage extends Component {
             success:(game) => {
                 this.props.addGameIdToState(game.id);
                 this.props.addIsHomeToState(true);
-                // alert("You hosted");
                 this.setState({isLoading: true, gameId: game.id});
             },
             error: function (gameScore, error) {
