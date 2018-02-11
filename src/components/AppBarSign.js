@@ -11,7 +11,10 @@ import {
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {FlatButton} from "material-ui";
-import {APP_NAME} from "../constansts/AppDetail";
+import {
+    APP_NAME, EDIT_PROFILE_DIALOG, LEADER_BOARD_DIALOG, SIGN_IN_DIALOG,
+    SIGN_UP_DIALOG
+} from "../constansts/AppDetail";
 import {flatButtonDivStyle, flatButtonLabelStyle} from "../constansts/Styles";
 
 class AppBarSign extends Component {
@@ -33,10 +36,10 @@ class AppBarSign extends Component {
             return (
                 <div style={flatButtonDivStyle} >
                     <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
-                        this.props.showDialog("signUp")
+                        this.props.showDialog(SIGN_UP_DIALOG)
                     }} label="Sign Up"/>
                     <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
-                        this.props.showDialog("signIn")
+                        this.props.showDialog(SIGN_IN_DIALOG)
                     }} label="Sign In"/>
                 </div>
             )
@@ -47,7 +50,7 @@ class AppBarSign extends Component {
             <div>
                 <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
                     this.props.setFetchUsersData(true);
-                    this.props.showDialog("leaderBoard")
+                    this.props.showDialog(LEADER_BOARD_DIALOG)
                 }} label="Leader Board"/>
                 <IconMenu
                     iconButtonElement={
@@ -59,7 +62,7 @@ class AppBarSign extends Component {
                     targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
                     <MenuItem
-                        onClick={() => {this.props.showDialog("editProfile")}}
+                        onClick={() => {this.props.showDialog(EDIT_PROFILE_DIALOG)}}
                         primaryText="Edit profile"/>
                     <MenuItem
                         onClick={() => {this.signOut()}}

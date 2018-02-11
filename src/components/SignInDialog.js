@@ -2,8 +2,10 @@ import React, {Component} from "react";
 import {addSnackText, addUserToState, closeDialog, closeSnackText, showDialog, signIn} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {getUser, parseSignIn} from "../init/ParseInit";
+import {getUser, parseSignIn} from "../init/Parse";
 import {Dialog, FlatButton, RaisedButton, TextField} from "material-ui";
+import {SIGN_IN_DIALOG} from "../constansts/AppDetail";
+import {buttonThemeColorStyle} from "../constansts/Styles";
 
 
 
@@ -60,6 +62,7 @@ class SignInDialog extends Component {
                             }}
                         />
                         <RaisedButton
+                            style={Object.assign({} , buttonThemeColorStyle)}
                             label="Sign In"
                             primary={true}
                             onClick={() => {
@@ -72,7 +75,7 @@ class SignInDialog extends Component {
                     </div>
                 }
                 modal={false}
-                open={this.props.dialog === "signIn"}
+                open={this.props.dialog === SIGN_IN_DIALOG}
                 onRequestClose={() => {this.props.closeDialog()}}
             >
                 <TextField

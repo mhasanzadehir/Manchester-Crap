@@ -7,6 +7,8 @@ export const USER_POSITIONS = 'UserPositions';
 export const USER_PLAY_STATES = 'UserPlayStates';
 export const IS_PEND = 'IsPend';
 
+export const BOT_ID = "UbTL1bQa6N";
+
 /**
  * Player Table Columns
  * @type {string}

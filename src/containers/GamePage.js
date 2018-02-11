@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {addUserToState} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {parseInitializer} from "../init/ParseInit";
+import {parseInitializer} from "../init/Parse";
 import {NotificationManager} from 'react-notifications';
 import {
     AVATAR, BIRTH_DATE, CITY, EMAIL, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, SCORE, USER_IDS, USER_NAME,
@@ -73,6 +73,7 @@ class GamePage extends Component {
             }
         });
         subscription = query.subscribe();
+        // query.unsubscribe()
         subscription.on('update', (object) => {
             this.setState({
                 userPositions: object.get(USER_POSITIONS),

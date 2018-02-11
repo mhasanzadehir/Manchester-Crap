@@ -2,8 +2,10 @@ import React, {Component} from "react";
 import {addSnackText, addUserToState, closeDialog, closeSnackText, showDialog} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {getUser, setUserInfo} from "../init/ParseInit";
+import {getUser, setUserInfo} from "../init/Parse";
 import {DatePicker, Dialog, FlatButton, RadioButton, RadioButtonGroup, RaisedButton, TextField} from "material-ui";
+import {EDIT_PROFILE_DIALOG} from "../constansts/AppDetail";
+import {buttonThemeColorStyle} from "../constansts/Styles";
 
 
 class EditProfileDialog extends Component {
@@ -82,6 +84,7 @@ class EditProfileDialog extends Component {
                             }}
                         />
                         <RaisedButton
+                            style={Object.assign({} , buttonThemeColorStyle)}
                             label="Submit"
                             primary={true}
                             onClick={() => {
@@ -91,7 +94,7 @@ class EditProfileDialog extends Component {
                     </div>
                 }
                 modal={false}
-                open={this.props.dialog === "editProfile"}
+                open={this.props.dialog === EDIT_PROFILE_DIALOG}
                 onRequestClose={() => {
                     this.props.closeDialog()
                 }}
