@@ -58,7 +58,9 @@ import {APP_NAME} from "./constansts/AppDetail";
 //     }
 // }
 //
-//todo clear this line
+
+// localStorage.removeItem(APP_NAME);
+
 let storedState;
 let serializedState = localStorage.getItem(APP_NAME);
 if (serializedState != null) {

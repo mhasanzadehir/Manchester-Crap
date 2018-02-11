@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {addUserToState} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {parseInitializer} from "../init/parsInit";
+import {parseInitializer} from "../init/ParseInit";
 import {
     IS_GUEST_PLAYED, IS_HOME_PLAYED, POSITION_GUEST, POSITION_HOME, USER_GUEST,
     USER_HOME

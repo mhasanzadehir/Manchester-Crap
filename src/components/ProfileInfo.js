@@ -1,4 +1,4 @@
-import {parseInitializer} from "../init/parsInit";
+import {parseInitializer} from "../init/ParseInit";
 import React, {Component} from "react";
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
@@ -16,15 +16,14 @@ import TextFields from "./TextFields";
 
 
 let Parse = parseInitializer();
-const Player = Parse.Object.extend("Player");
 const Game = Parse.Object.extend("Game");
 
 // let query = new Parse.Query(Player);
 
 
 class ProfileInfo extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         let player = this.props.player;
         this.state = {
             userName: player.get(USER).get(USER_NAME),
@@ -58,7 +57,7 @@ class ProfileInfo extends Component {
     onSubmit(e) {
         e.preventDefault();
         let user = this.props.player.get(USER);
-        let pQuery = new Parse.Query(Player);
+        let pQuery = new Parse.Query();
         pQuery.equalTo(USER, user);
         pQuery.first({
             success: (object) => {

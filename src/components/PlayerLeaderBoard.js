@@ -4,7 +4,7 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import {parseInitializer} from "../init/parsInit";
+import {parseInitializer} from "../init/ParseInit";
 import {AVATAR, FIRST_NAME, LAST_NAME, SCORE} from "../constansts/DBColumn";
 
 class PlayerLeaderBoard extends Component {

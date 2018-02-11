@@ -41,25 +41,21 @@ export function parseSignUp(state, success, addSnackText) {
     user.set(USER_NAME, state.username);
     user.set(EMAIL, state.email);
     user.set(PASSWORD, state.password);
+    user.set(FIRST_NAME, "");
+    user.set(LAST_NAME, "");
+    user.set(CITY, "");
+    user.set(GENDER, true);
+    user.set(BIRTH_DATE, new Date());
+    user.set(SCORE, 0);
     user.signUp(null, {
         success: (user) => {
             addSnackText("You sign up successfully");
-            insertPlayer(user);
             success(user);
         },
         error: (user, error) => {
             addSnackText(error.message)
         }
     });
-}
-
-function insertPlayer(user) {
-    let player = new Player();
-    player.set(USER, user);
-    player.set(USER_NAME, user.get(USER_NAME));
-    player.save();
-    user.set(PLAYER, player);
-    user.save();
 }
 
 export function getUser(userId , addSnackText) {
@@ -71,6 +67,12 @@ export function getUser(userId , addSnackText) {
             user.id = object.id;
             user.username = object.get(USER_NAME);
             user.email = object.get(EMAIL);
+            user.firstName = object.get(FIRST_NAME);
+            user.lastName = object.get(LAST_NAME);
+            user.city = object.get(CITY);
+            user.birthDate = object.get(BIRTH_DATE);
+            user.gender = object.get(GENDER);
+            // user.score = object.get(SCORE);
         }
         ,
         error: function (error) {
@@ -80,26 +82,23 @@ export function getUser(userId , addSnackText) {
     return user;
 }
 
-export function getPlayer(playerId, addSnackText) {
-    let player = {};
-    let query = new Parse.Query(Player);
-    query.equalTo(OBJECT_ID, playerId);
+export function setUserInfo(state , addSnackText) {
+    let user = {};
+    let query = new Parse.Query(User);
+    query.equalTo(OBJECT_ID, state.id);
     query.first({
         success: (object) => {
-            player.id = object.id;
-            player.firstName = object.get(FIRST_NAME);
-            player.username = object.get(USER_NAME);
-            player.lastName = object.get(LAST_NAME);
-            player.city = object.get(CITY);
-            player.birthDate = object.get(BIRTH_DATE);
-            player.gender = object.get(GENDER);
-            player.score = object.get(SCORE);
+            object.set(FIRST_NAME, state.firstName);
+            object.set(LAST_NAME, state.lastName);
+            object.set(CITY, state.city);
+            object.set(BIRTH_DATE, state.birthDate);
+            object.set(GENDER, state.gender);
+            object.save();
         }
         ,
         error: function (error) {
             addSnackText("Error: " + error.code + " " + error.message);
         }
     });
-    return player;
-
+    return user;
 }
