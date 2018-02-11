@@ -5,30 +5,73 @@ import {connect} from "react-redux";
 import {parseInitializer} from "../init/ParseInit";
 import {NotificationManager} from 'react-notifications';
 import {
-    AVATAR, FIRST_NAME, LAST_NAME, OBJECT_ID, SCORE, USER_PLAY_STATES,
+    AVATAR, BIRTH_DATE, CITY, EMAIL, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, SCORE, USER_IDS, USER_NAME,
+    USER_PLAY_STATES,
     USER_POSITIONS
 } from "../constansts/DBColumn";
+import ReactDice from 'react-dice-complete'
+import 'react-dice-complete/dist/react-dice-complete.css'
+import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
+import {Avatar} from "material-ui";
+import {getUser} from "../init/ParseInit";
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
 let query = new Parse.Query(Game);
 let subscription;
+let map = new Map();
+
 
 class GamePage extends Component {
     constructor(){
         super();
         this.state = {
-            // users: [],
-            // userIds: [],
+            users: [],
+            userIds: [],
             userPositions: [],
             userPlayStates: [],
         };
         this.throwTas = this.throwTas.bind(this);
+        map.set(1, {x: 35, y: 10});
+        map.set(2, {x: 35, y: 10});
+        map.set(3, {x: 35, y: 10});
+        map.set(4, {x: 35, y: 10});
+        map.set(5, {x: 35, y: 10});
+        map.set(6, {x: 35, y: 10});
+        map.set(7, {x: 35, y: 10});
+        map.set(8, {x: 35, y: 10});
+        map.set(9, {x: 35, y: 10});
+        map.set(10, {x: 35, y: 10});
+        map.set(11, {x: 35, y: 10});
+        map.set(12, {x: 35, y: 10});
+        map.set(13, {x: 35, y: 10});
+        map.set(14, {x: 35, y: 10});
+        map.set(15, {x: 35, y: 10});
+        map.set(16, {x: 35, y: 10});
+        map.set(17, {x: 35, y: 10});
+        map.set(18, {x: 35, y: 10});
+        map.set(19, {x: 35, y: 10});
+        map.set(20, {x: 35, y: 10});
+        map.set(21, {x: 35, y: 10});
     }
 
     componentDidMount(){
         console.log(this.props.gameId);
         query.equalTo(OBJECT_ID, this.props.gameId);
+        query.first({
+            success: (game) => {
+                let users = [];
+                let userIds = game.get(USER_IDS);
+                for (let id of userIds) {
+                    users.push(getUser(id));
+                }
+                this.setState({userIds : userIds, users : users})
+            }
+            ,
+            error: function (error) {
+                alert("Error: " + error.code + " " + error.message);
+            }
+        });
         subscription = query.subscribe();
         subscription.on('update', (object) => {
             this.setState({
@@ -38,11 +81,9 @@ class GamePage extends Component {
         });
     }
 
-
-    throwTas(){
+    throwTas(rand){
         query.first({
             success: (game) => {
-                let rand = Math.floor((Math.random() * 6) + 1);
                 let positions = game.get(USER_POSITIONS);
                 let playStates = game.get(USER_PLAY_STATES);
                 let index = this.props.index;
@@ -61,12 +102,28 @@ class GamePage extends Component {
 
     render() {
         return (
-            <div>
-                {this.state.userPositions.map(function(item, i){
-                    return <h1 key={i}>{item}</h1>
-
+            <div style={{textAlign : 'center', padding : '20px'}} >
+                <img src={require('../images/map1.jpg')} width={'60%'} height={'600px'} />
+                {this.state.users.map((item, i) => {
+                    console.log("Test" + i, this.state.userPositions);
+                    console.log("Test2 " , map.get(this.state.userPositions[i]));
+                    let ml = map.get(this.state.userPositions[i]) * -1;
+                    let mt = map.get(this.state.userPositions[i]) * -1;
+                    let avatarStyle = {
+                        marginLeft : {ml},
+                        marginTop : {mt}
+                    };
+                    return (<span style={avatarStyle}><Avatar src={item.avatar} /></span>)
                 })}
-                <button disabled={this.state.userPlayStates[this.props.index]} onClick={this.throwTas}>Tas Bendaz</button>
+                <div>
+                    <ReactDice
+                        numDice={1}
+                        rollDone={this.throwTas}
+                        faceColor={APP_PRIMARY_COLOR}
+                        dotColor={'white'}
+                        ref={dice => this.reactDice = dice}
+                    />
+                </div>
             </div>
         );
     }

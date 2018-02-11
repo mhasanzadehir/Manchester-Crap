@@ -50,7 +50,7 @@ class App extends Component {
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/GamePage" component={GamePage}/>
                     <Route path='/UserPage' component={UserPage}/>
-                    <Route render={() => <h1>Page not found</h1>}/>
+                    {/*<Route render={() => <h1>Page not found</h1>}/>*/}
                 </Switch>
                 <Snackbar
                     open={this.props.snackIsOpen}
