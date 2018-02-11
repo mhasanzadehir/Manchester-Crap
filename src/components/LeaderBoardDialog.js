@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {addSnackText, addUserToState, closeDialog, closeSnackText, showDialog} from "../actions";
+import {addSnackText, addUserToState, closeDialog, closeSnackText, setFetchUsersData, showDialog} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {getUsersForLeaderBoard, parseInitializer} from "../init/ParseInit";
@@ -10,20 +10,6 @@ import {SCORE} from "../constansts/DBColumn";
 let Parse = parseInitializer();
 const User = Parse.Object.extend("User");
 
-function fetchData() {
-    let query = new Parse.Query(User);
-    query.descending(SCORE);
-    query.find({
-        success: (object) => {
-            console.log("[[[[[[[", object)
-            this.setState({data: object});
-        }
-        ,
-        error: function (error) {
-            addSnackText("Error: " + error.code + " " + error.message)
-        }
-    });
-}
 
 class LeaderBoardDialog extends Component {
     constructor() {
@@ -34,7 +20,30 @@ class LeaderBoardDialog extends Component {
 
     }
 
+    fetchData(){
+        let query = new Parse.Query(User);
+        query.descending(SCORE);
+        query.find({
+            success: (object) => {
+                console.log("[[[[[[[", object)
+                this.setState({data: object});
+            }
+            ,
+            error: function (error) {
+                addSnackText("Error: " + error.code + " " + error.message)
+            }
+        });
+    }
+
+
     render() {
+        if (this.props.fetchUsersData){
+            this.fetchData();
+            this.props.setFetchUsersData(false);
+        }
+        if (this.state.data === undefined || this.state.data == null){
+            return null;
+        }
         return (
             <Dialog
                 contentStyle={{textAlign: "center", width: "350px"}}
@@ -69,6 +78,7 @@ const mapStateToProps = function (state) {
     return {
         dialog: state.pageStatus.dialog,
         user: state.user,
+        fetchUsersData: state.pageStatus.fetchUsersData,
     };
 };
 
@@ -79,6 +89,7 @@ const mapDispatchToProps = function (dispatch) {
         showDialog: showDialog,
         closeDialog: closeDialog,
         addUserToState: addUserToState,
+        setFetchUsersData: setFetchUsersData
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LeaderBoardDialog);

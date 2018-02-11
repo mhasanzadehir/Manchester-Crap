@@ -24,7 +24,7 @@ const Game = Parse.Object.extend("Game");
 class ProfileInfo extends Component {
     constructor() {
         super();
-        let player = this.props.player;
+        let player = this.props.user;
         this.state = {
             userName: player.get(USER).get(USER_NAME),
             firstName: player.get(FIRST_NAME),
@@ -56,7 +56,7 @@ class ProfileInfo extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        let user = this.props.player.get(USER);
+        let user = this.props.user.get(USER);
         let pQuery = new Parse.Query();
         pQuery.equalTo(USER, user);
         pQuery.first({

@@ -1,6 +1,6 @@
 export const ADD_USER = 'ADD_USER';
 export const ADD_GAME_ID = 'ADD_GAME_ID';
-export const ADD_IS_HOME = 'ADD_IS_HOME';
+export const ADD_GAME_INDEX = 'ADD_GAME_INDEX';
 export const ADD_SNACK_TEXT = 'ADD_SNACK_TEXT';
 export const CLOSE_SNACK_TEXT = 'CLOSE_SNACK_TEXT';
 export const SHOW_DIALOG = "SHOW_DIALOG";
@@ -9,6 +9,7 @@ export const CLOSE_DIALOG = "CLOSE_DIALOG";
 export const SIGN_IN = "SIGN_IN";
 export const SIGN_OUT = "SIGN_OUT";
 export const SET_LEFT_DRAWER = "CLOSE_LEFT_DRAWER";
+export const SET_FETCH_USERS_DATA = "SET_FETCH_USERS_DATA";
 
 
 export function addUserToStateUnsafe(user) {
@@ -25,10 +26,10 @@ export function addGameIdToStateUnsafe(gameId) {
     };
 }
 
-export function addIsHomeToStateUnsafe(isHome) {
+export function addGameIndexToStateUnsafe(index) {
     return {
-        type: ADD_IS_HOME,
-        isHome
+        type: ADD_GAME_INDEX,
+        index
     };
 }
 
@@ -78,8 +79,15 @@ export function setLeftDrawerUnsafe(state) {
 }
 
 export function setLoadingUnsafe(state) {
-    return{
+    return {
         type: SET_LOADING,
+        state
+    }
+}
+
+export function setFetchUsersDataUnsafe(state) {
+    return {
+        type: SET_FETCH_USERS_DATA,
         state
     }
 }
@@ -94,7 +102,10 @@ export function defaultState() {
             birthDate: new Date(),
             gender: true,
         },
-        game: null,
+        game: {
+            index: -1,
+            gameId: null,
+        },
         pageStatus: {
             snack: {
                 text: "",
@@ -104,6 +115,7 @@ export function defaultState() {
             signed: false,
             leftDrawer: false,
             loading: true,
+            fetchUsersData: false,
         }
     }
 }

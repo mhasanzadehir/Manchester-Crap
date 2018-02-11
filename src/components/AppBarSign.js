@@ -4,7 +4,10 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
-import {addSnackText, addUserToState, closeSnackText, setLeftDrawer, showDialog, signOut} from "../actions";
+import {
+    addSnackText, addUserToState, closeSnackText, setFetchUsersData, setLeftDrawer, showDialog,
+    signOut
+} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {FlatButton} from "material-ui";
@@ -43,6 +46,7 @@ class AppBarSign extends Component {
         return (
             <div>
                 <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
+                    this.props.setFetchUsersData(true);
                     this.props.showDialog("leaderBoard")
                 }} label="Leader Board"/>
                 <IconMenu
@@ -90,6 +94,7 @@ const mapDispatchToProps = function (dispatch) {
         addSnackText: addSnackText,
         showDialog: showDialog,
         signOut: signOut,
+        setFetchUsersData: setFetchUsersData
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AppBarSign);

@@ -3,11 +3,11 @@ import {addUserToState} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {parseInitializer} from "../init/ParseInit";
-import {
-    IS_GUEST_PLAYED, IS_HOME_PLAYED, POSITION_GUEST, POSITION_HOME, USER_GUEST,
-    USER_HOME
-} from "../constansts/DBColumn";
 import {NotificationManager} from 'react-notifications';
+import {
+    AVATAR, FIRST_NAME, LAST_NAME, OBJECT_ID, SCORE, USER_PLAY_STATES,
+    USER_POSITIONS
+} from "../constansts/DBColumn";
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
@@ -17,50 +17,44 @@ let subscription;
 class GamePage extends Component {
     constructor(){
         super();
-        if(!this.props.user){
-            window.open("/" , "_self");
-        }
         this.state = {
-            PositionHome: 0,
-            PositionGuest: 0,
-            IsPlayed: false,
-            UserHome: '',
-            UserGuest: ''
+            // users: [],
+            // userIds: [],
+            userPositions: [],
+            userPlayStates: [],
         };
         this.throwTas = this.throwTas.bind(this);
+    }
 
-        query.equalTo("objectId", this.props.gameId);
+    componentDidMount(){
+        console.log(this.props.gameId);
+        query.equalTo(OBJECT_ID, this.props.gameId);
         subscription = query.subscribe();
         subscription.on('update', (object) => {
             this.setState({
-                PositionHome: object.get(POSITION_HOME),
-                PositionGuest: object.get(POSITION_GUEST),
-                IsPlayed: ((this.props.isHome) ? object.get(IS_HOME_PLAYED) : object.get(IS_GUEST_PLAYED)),
-                UserHome: object.get(USER_HOME).get("username"),
-                UserGuest: object.get(USER_GUEST).get("username")
+                userPositions: object.get(USER_POSITIONS),
+                userPlayStates: object.get(USER_PLAY_STATES)
             })
         });
-
     }
 
 
     throwTas(){
         query.first({
-            success: (object) => {
+            success: (game) => {
                 let rand = Math.floor((Math.random() * 6) + 1);
-                if (this.props.isHome) {
-                    object.set(POSITION_HOME , +object.get(POSITION_HOME) + rand);
-                    object.set(IS_HOME_PLAYED, true);
-                    object.set(IS_GUEST_PLAYED, false);
-                } else {
-                    object.set(POSITION_GUEST , +object.get(POSITION_GUEST) + rand);
-                    object.set(IS_GUEST_PLAYED, true);
-                    object.set(IS_HOME_PLAYED, false);
-                }
-                object.save();
+                let positions = game.get(USER_POSITIONS);
+                let playStates = game.get(USER_PLAY_STATES);
+                let index = this.props.index;
+                positions[index] += rand;
+                playStates[index] = true;
+                playStates[(index+1) % playStates.length] = false;
+                game.set(USER_POSITIONS , positions);
+                game.set(USER_PLAY_STATES , playStates);
+                game.save();
             },
             error: function(error) {
-                NotificationManager.error("Error: " + error.code + " " + error.message);
+                alert("Error: " + error.code + " " + error.message);
             }
         });
     }
@@ -68,9 +62,11 @@ class GamePage extends Component {
     render() {
         return (
             <div>
-                <h1 id={"home"}>{this.state.UserHome}  {this.state.PositionHome}</h1><br/>
-                <h1 id={"guest"}>{this.state.UserGuest} {this.state.PositionGuest}</h1><br/>
-                <button disabled={this.state.IsPlayed} onClick={this.throwTas}>Tas Bendaz</button>
+                {this.state.userPositions.map(function(item, i){
+                    return <h1 key={i}>{item}</h1>
+
+                })}
+                <button disabled={this.state.userPlayStates[this.props.index]} onClick={this.throwTas}>Tas Bendaz</button>
             </div>
         );
     }
@@ -79,11 +75,10 @@ class GamePage extends Component {
 
 
 const mapStateToProps = function (state) {
-    console.log(state);
     return {
         user: state.user,
-        gameId: state.gameId,
-        isHome: state.isHome
+        gameId: state.game.gameId,
+        index: state.game.index
     };
 };
 

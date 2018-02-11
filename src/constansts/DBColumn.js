@@ -2,13 +2,10 @@
  * Game Table Columns
  * @type {string}
  */
-export const USER_HOME = 'UserHome';
-export const POSITION_HOME = 'PositionHome';
-export const USER_GUEST = 'UserGuest';
-export const POSITION_GUEST = 'PositionGuest';
+export const USER_IDS = 'UserIds';
+export const USER_POSITIONS = 'UserPositions';
+export const USER_PLAY_STATES = 'UserPlayStates';
 export const IS_PEND = 'IsPend';
-export const IS_HOME_PLAYED = 'IsHomePlayed';
-export const IS_GUEST_PLAYED = 'IsGuestPlayed';
 
 /**
  * Player Table Columns
@@ -30,7 +27,7 @@ export const SCORE = 'Score';
  * @type {string}
  */
 export const USER_NAME = 'username';
-export const PLAYER = 'player';
+export const PLAYER = 'user';
 export const EMAIL = 'email';
 export const PASSWORD = 'password';
 

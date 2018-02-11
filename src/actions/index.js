@@ -1,7 +1,7 @@
 import {
-    addSnackTextUnsafe, addGameIdToStateUnsafe, addIsHomeToStateUnsafe,
+    addSnackTextUnsafe, addGameIdToStateUnsafe, addGameIndexToStateUnsafe,
     addUserToStateUnsafe, closeSnackTextUnsafe, showDialogUnsafe,
-    closeDialogUnsafe, signInUnsafe, signOutUnsafe, setLeftDrawerUnsafe, setLoadingUnsafe
+    closeDialogUnsafe, signInUnsafe, signOutUnsafe, setLeftDrawerUnsafe, setLoadingUnsafe, setFetchUsersDataUnsafe
 } from "../constansts/ActionTypes";
 
 export function addUserToState(user) {
@@ -16,9 +16,9 @@ export function addGameIdToState(game) {
     };
 }
 
-export function addIsHomeToState(game) {
+export function addGameIndexToState(index) {
     return function (dispatch) {
-        dispatch(addIsHomeToStateUnsafe(game));
+        dispatch(addGameIndexToStateUnsafe(index));
     };
 }
 
@@ -49,6 +49,12 @@ export function closeDialog() {
 export function setLeftDrawer(state) {
     return function (dispatch) {
         dispatch(setLeftDrawerUnsafe(state))
+    }
+}
+
+export function setFetchUsersData(state) {
+    return function (dispatch) {
+        dispatch(setFetchUsersDataUnsafe(state))
     }
 }
 

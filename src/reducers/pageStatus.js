@@ -48,6 +48,11 @@ export default function (state = null, action) {
                 ...state,
                 loading: action.state
             };
+        case type.SET_FETCH_USERS_DATA:
+            return{
+                ...state,
+                fetchUsersData: action.state
+            };
         default:
             return state;
     }

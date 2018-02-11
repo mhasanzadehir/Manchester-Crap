@@ -5,12 +5,12 @@ export default function (state = null , action) {
         case type.ADD_GAME_ID:
             return {
                 ...state,
-                id: action.gameId
+                gameId: action.gameId
             };
-        case type.ADD_IS_HOME:
+        case type.ADD_GAME_INDEX:
             return {
                 ...state,
-                isHome: action.isHome,
+                index: action.index,
             };
         default:
             return state;
