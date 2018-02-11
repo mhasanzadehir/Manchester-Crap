@@ -2,14 +2,36 @@ import React, {Component} from "react";
 import {addSnackText, addUserToState, closeDialog, closeSnackText, showDialog} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {getUser, setUserInfo} from "../init/ParseInit";
+import {getUsersForLeaderBoard, parseInitializer} from "../init/ParseInit";
 import {DatePicker, Dialog, FlatButton, RadioButton, RadioButtonGroup, RaisedButton, TextField} from "material-ui";
+import PlayerLeaderBoard from "./PlayerLeaderBoard";
+import {SCORE} from "../constansts/DBColumn";
 
+let Parse = parseInitializer();
+const User = Parse.Object.extend("User");
+
+function fetchData() {
+    let query = new Parse.Query(User);
+    query.descending(SCORE);
+    query.find({
+        success: (object) => {
+            console.log("[[[[[[[", object)
+            this.setState({data: object});
+        }
+        ,
+        error: function (error) {
+            addSnackText("Error: " + error.code + " " + error.message)
+        }
+    });
+}
 
 class LeaderBoardDialog extends Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+            data: null
+        };
+
     }
 
     render() {
@@ -35,7 +57,7 @@ class LeaderBoardDialog extends Component {
                     this.props.closeDialog()
                 }}
             >
-                salam
+                <PlayerLeaderBoard users={this.state.data}/>
             </Dialog>
 
         );

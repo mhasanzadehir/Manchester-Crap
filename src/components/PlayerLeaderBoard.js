@@ -7,12 +7,18 @@ import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bu
 import {parseInitializer} from "../init/ParseInit";
 import {AVATAR, FIRST_NAME, LAST_NAME, SCORE} from "../constansts/DBColumn";
 
+let Parse = parseInitializer();
+
+function getAvatarUrl(item) {
+
+}
+
 class PlayerLeaderBoard extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            data : this.props.players
+            data : this.props.users
         };
     }
 
@@ -23,21 +29,16 @@ class PlayerLeaderBoard extends Component {
                     <Subheader>Leader Board</Subheader>
                     {this.state.data.map(function(item, i){
                         if (item.get(FIRST_NAME)) {
-                            console.log(item.get(AVATAR));
                             return <ListItem
                                 key={i}
                                 primaryText={item.get(FIRST_NAME) + " " + item.get(LAST_NAME)}
-                                leftAvatar={<Avatar src={this.getAvatarUrl(item)} />}
+                                leftAvatar={<Avatar src={item.get(AVATAR)._url} />}
                                 secondaryText={item.get(SCORE)}
                                 />
                         }
                     })}
                     </List>
             </div>);
-
-    }
-
-    getAvatarUrl(item) {
 
     }
 

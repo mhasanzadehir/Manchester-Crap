@@ -25,7 +25,7 @@ import {openGameFlatButtonLabelStyle} from "../constansts/Styles";
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
-const Player = Parse.Object.extend("Player");
+const User = Parse.Object.extend("User");
 let subscription;
 
 
@@ -35,7 +35,7 @@ class UserPage extends Component {
         super();
 
         this.state = {
-            player : null,
+            user : null,
             showPopup: false,
             isLoading:false,
             gameId: null,
@@ -92,7 +92,7 @@ class UserPage extends Component {
     }
 
     showLeaderBoard() {
-        let query = new Parse.Query(Player);
+        let query = new Parse.Query(User);
         query.descending(SCORE);
         query.find({
             success: (object) => {
@@ -106,23 +106,6 @@ class UserPage extends Component {
         });
 
     }
-
-    setPlayerToState() {
-        let query = new Parse.Query(Player);
-        query.equalTo(USER, this.props.user);
-        query.first({
-            success: (object) => {
-                this.setState({
-                    player: object
-                });
-            }
-            ,
-            error: function (error) {
-                alert("Error: " + error.code + " " + error.message);
-            }
-        });
-    }
-
 
     hostGame() {
         let game = new Game();
@@ -149,6 +132,34 @@ class UserPage extends Component {
 
     render() {
         return (
+            <div>
+                <p>Hi {this.props.user.username}</p>
+                <button onClick={this.startGame}>Play Mench</button>
+                <button onClick={this.editProfile}>Edit Your Profile</button>
+                <button onClick={this.showLeaderBoard}>Leader Board</button>
+                {this.state.isLoading?<ReactLoading type="spinningBubbles" color="black"/>:null}
+                {this.state.showPopup ?
+                    <Popup
+                        text='Close Me'
+                        closePopup={this.editProfile.bind(this)}>
+                        <ProfileInfo player={this.state.player} onSubmit={this.saveProfileInfo}/>
+
+                    </Popup> : null}
+
+                {this.state.leaderBoardPopUp ?
+                    <Popup
+                        text='Close Me'
+                        closePopup={this.showLeaderBoard.bind(this)}>
+                        <PlayerLeaderBoard users={this.state.leaderBoardData}/>
+                    </Popup> : null}
+            </div>
+        )
+    }
+}
+
+class Popup extends React.Component {
+    render() {
+        return (
             <div style={{textAlign: "center", marginTop:"400px"}}>
                 <FlatButton
                     style={{backgroundColor: APP_PRIMARY_COLOR}}
@@ -158,6 +169,7 @@ class UserPage extends Component {
         )
     }
 }
+
 
 Parse.LiveQuery.on('open', () => {
     console.log('socket connection established');
