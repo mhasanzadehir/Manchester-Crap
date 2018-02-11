@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {RaisedButton} from "material-ui";
+import {FlatButton, RaisedButton} from "material-ui";
 import {
     addSnackText, addUserToState, closeSnackText, setLeftDrawer, showDialog, signOut
 } from "../actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
+import {flatButtonLabelStyle, openGameFlatButtonLabelStyle} from "../constansts/Styles";
+import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
 
 class MainPage extends Component {
     constructor() {
@@ -12,9 +14,16 @@ class MainPage extends Component {
         this.state = {};
     }
     render() {
+        if (!this.props.signed){
+            return null;
+        }
         return (
-            <div>
-                salam
+            <div style={{textAlign: "center", marginTop:"400px"}}>
+                <FlatButton
+                    onClick={()=>{window.open('/UserPage', '_self')}}
+                    style={{backgroundColor: APP_PRIMARY_COLOR}}
+                    labelStyle={openGameFlatButtonLabelStyle}
+                    label="Open Game"/>
             </div>
         );
     }

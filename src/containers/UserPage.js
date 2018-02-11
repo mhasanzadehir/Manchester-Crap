@@ -18,6 +18,9 @@ import ProfileInfo from "../components/ProfileInfo";
 import "../App.css"
 import ReactLoading from 'react-loading';
 import PlayerLeaderBoard from "../components/PlayerLeaderBoard";
+import {FlatButton, Paper} from "material-ui";
+import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
+import {openGameFlatButtonLabelStyle} from "../constansts/Styles";
 
 
 let Parse = parseInitializer();
@@ -145,46 +148,16 @@ class UserPage extends Component {
 
 
     render() {
-        console.log("salam")
         return (
-            <div>
-                <p>Hi {this.props.user.username}</p>
-                <button onClick={this.startGame}>Play Mench</button>
-                <button onClick={this.editProfile}>Edit Your Profile</button>
-                <button onClick={this.showLeaderBoard}>Leader Board</button>
-                {this.state.isLoading?<ReactLoading type="spinningBubbles" color="black"/>:null}
-                {this.state.showPopup ?
-                    <Popup
-                        text='Close Me'
-                        closePopup={this.editProfile.bind(this)}>
-                        <ProfileInfo player={this.state.player} onSubmit={this.saveProfileInfo}/>
-
-                    </Popup> : null}
-
-                {this.state.leaderBoardPopUp ?
-                    <Popup
-                        text='Close Me'
-                        closePopup={this.showLeaderBoard.bind(this)}>
-                        <PlayerLeaderBoard players={this.state.leaderBoardData}/>
-                    </Popup> : null}
+            <div style={{textAlign: "center", marginTop:"400px"}}>
+                <FlatButton
+                    style={{backgroundColor: APP_PRIMARY_COLOR}}
+                    labelStyle={openGameFlatButtonLabelStyle}
+                    label="Start Game"/>
             </div>
         )
     }
 }
-
-class Popup extends React.Component {
-    render() {
-        return (
-            <div className='popup'>
-                <div className='popup_inner'>
-                    {this.props.children}
-                    <button onClick={this.props.closePopup}>close me</button>
-                </div>
-            </div>
-        );
-    }
-}
-
 
 Parse.LiveQuery.on('open', () => {
     console.log('socket connection established');

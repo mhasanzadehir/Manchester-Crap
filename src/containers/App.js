@@ -16,6 +16,7 @@ import SignUpDialog from "../components/SignUpDialog";
 import LeftDrawer from "../components/LeftDrawer";
 import EditProfileDialog from "../components/EditProfileDialog";
 import UserPage from "./UserPage";
+import LeaderBoardDialog from "../components/LeaderBoardDialog";
 
 
 class App extends Component {
@@ -44,6 +45,7 @@ class App extends Component {
                 <SignInDialog/>
                 <SignUpDialog/>
                 <EditProfileDialog/>
+                <LeaderBoardDialog/>
                 <Switch>
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/GamePage" component={GamePage}/>

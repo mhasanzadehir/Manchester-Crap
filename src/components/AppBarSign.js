@@ -9,14 +9,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {FlatButton} from "material-ui";
 import {APP_NAME} from "../constansts/AppDetail";
-
-const flatButtonLabelStyle = {
-    color: 'white',
-    fontSize: '20px'
-};
-const flatButtonDivStyle = {
-    padding : '5px'
-};
+import {flatButtonDivStyle, flatButtonLabelStyle} from "../constansts/Styles";
 
 class AppBarSign extends Component {
     constructor() {
@@ -49,10 +42,9 @@ class AppBarSign extends Component {
 
         return (
             <div>
-                <FlatButton
-                    onClick={()=>{window.open('/UserPage', '_self')}}
-                    labelStyle={flatButtonLabelStyle}
-                    label="Open Game"/>
+                <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
+                    this.props.showDialog("leaderBoard")
+                }} label="Leader Board"/>
                 <IconMenu
                     iconButtonElement={
                         <IconButton tooltip={this.props.username}>
