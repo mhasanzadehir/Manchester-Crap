@@ -27,23 +27,18 @@ let subscription;
 
 
 
-class MainPage extends Component {
+class UserPage extends Component {
     constructor() {
         super();
-        // if (!this.props.user) {
-        //     window.open("/", "_self");
-        // }
 
         this.state = {
             player : null,
-            redirect: false,
             showPopup: false,
             isLoading:false,
             gameId: null,
             leaderBoardPopUp : false,
             leaderBoardData : null
         };
-        // this.setPlayerToState();
         this.startGame = this.startGame.bind(this);
         this.editProfile = this.editProfile.bind(this);
         this.hostGame = this.hostGame.bind(this);
@@ -76,7 +71,6 @@ class MainPage extends Component {
                     alert("You joined");
 
 
-                    this.setState({redirect: true});
                 } else {
                     this.hostGame()
                 }
@@ -140,6 +134,7 @@ class MainPage extends Component {
             success:(game) => {
                 this.props.addGameIdToState(game.id);
                 this.props.addIsHomeToState(true);
+                // alert("You hosted");
                 this.setState({isLoading: true, gameId: game.id});
             },
             error: function (gameScore, error) {
@@ -150,9 +145,7 @@ class MainPage extends Component {
 
 
     render() {
-        if (this.state.redirect) {
-            return <Redirect push to="/GamePage"/>;
-        }
+        console.log("salam")
         return (
             <div>
                 <p>Hi {this.props.user.username}</p>
@@ -218,7 +211,7 @@ const mapDispatchToProps = function (dispatch) {
         addIsHomeToState
     }, dispatch);
 };
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default connect(mapStateToProps, mapDispatchToProps)(UserPage);
 
 
 
