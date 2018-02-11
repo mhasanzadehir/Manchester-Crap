@@ -3,7 +3,6 @@ import {parseInitializer} from "../init/ParseInit";
 import {connect} from 'react-redux'
 import {addGameIdToState, addIsHomeToState, addUserToState} from "../actions";
 import {bindActionCreators} from 'redux'
-import {Redirect} from "react-router";
 import {
     BIRTH_DATE, CITY, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, PLAYER, SCORE, USER, USER_HOME,
     USER_NAME
@@ -14,10 +13,7 @@ import {POSITION_HOME} from "../constansts/DBColumn";
 import {POSITION_GUEST} from "../constansts/DBColumn";
 import {IS_HOME_PLAYED} from "../constansts/DBColumn";
 import {IS_GUEST_PLAYED} from "../constansts/DBColumn";
-import ProfileInfo from "../components/ProfileInfo";
 import "../App.css"
-import ReactLoading from 'react-loading';
-import PlayerLeaderBoard from "../components/PlayerLeaderBoard";
 import {FlatButton, Paper} from "material-ui";
 import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
 import {openGameFlatButtonLabelStyle} from "../constansts/Styles";
