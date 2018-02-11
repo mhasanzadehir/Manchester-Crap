@@ -27,13 +27,17 @@ class PlayerLeaderBoard extends Component {
                             return <ListItem
                                 key={i}
                                 primaryText={item.get(FIRST_NAME) + " " + item.get(LAST_NAME)}
-                                leftAvatar={<Avatar src={item.get(AVATAR)} />}
+                                leftAvatar={<Avatar src={this.getAvatarUrl(item)} />}
                                 secondaryText={item.get(SCORE)}
                                 />
                         }
                     })}
                     </List>
             </div>);
+
+    }
+
+    getAvatarUrl(item) {
 
     }
 

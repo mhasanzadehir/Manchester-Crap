@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Route, Switch} from 'react-router-dom'
-import {APP_NAME} from "../constansts/AppDetail";
+import {APP_NAME, APP_PRIMARY_COLOR} from "../constansts/AppDetail";
 import AppBar from 'material-ui/AppBar';
 import {Snackbar} from "material-ui";
 import AppBarSign from "../components/AppBarSign";
@@ -34,7 +34,7 @@ class App extends Component {
             <div>
                 <AppBar
                     title={APP_NAME}
-                    style={{backgroundColor : ' #EE3F0C'}}
+                    style={{backgroundColor : APP_PRIMARY_COLOR}}
                     onLeftIconButtonClick={() => {
                         this.props.setLeftDrawer(true)
                     }}
@@ -45,7 +45,7 @@ class App extends Component {
                 <SignUpDialog/>
                 <EditProfileDialog/>
                 <Switch>
-                    <Route path='/' component={MainPage}/>
+                    <Route path='/' component={UserPage}/>
                     <Route path='/GamePage' component={GamePage}/>
                     <Route path='/UserPage' component={UserPage}/>
                 </Switch>
