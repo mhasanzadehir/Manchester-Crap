@@ -14,6 +14,7 @@ import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
 import {Avatar} from "material-ui";
 import {getUser} from "../init/Parse";
 import Background from "../images/map1.jpg"
+import {gameMapDiv} from "../constansts/Styles";
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
@@ -108,7 +109,7 @@ class GamePage extends Component {
     render() {
         return (
             <div style={{textAlign : 'center',height:"100%", padding : '20px' , boxShadow: "inset 0 0 0 3000px rgba(255,255,255,0.6)"}} >
-                <div style={sectionStyle}>
+                <div style={Object.assign({} , gameMapDiv)}>
                     {this.state.users.map((item, i) => {
                         console.log("Test" + i, this.state.userPositions);
                         console.log("Test2 " , map.get(this.state.userPositions[i]));

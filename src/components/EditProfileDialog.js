@@ -67,6 +67,7 @@ class EditProfileDialog extends Component {
     submit() {
         setUserInfo(this.state, this.props.addSnackText);
         this.props.addUserToState(getUser(this.props.user.id, this.props.addSnackText));
+        console.log("LALALALAL",this.props.user);
         this.props.addSnackText("Changes were successful");
         this.props.closeDialog();
     }
@@ -82,6 +83,7 @@ class EditProfileDialog extends Component {
     }
 
     render() {
+        console.log(this.props.user);
         if (this.state.id !== this.props.user.id) {
             this.getUserState();
         }

@@ -19,6 +19,7 @@ import UserPage from "./UserPage";
 import LeaderBoardDialog from "../components/LeaderBoardDialog";
 import ShowProfileDialog from "../components/ShowProfileDialog";
 import {mainDiv} from "../constansts/Styles";
+import {getUser} from "../init/Parse";
 
 
 class App extends Component {
@@ -30,6 +31,8 @@ class App extends Component {
     componentDidMount() {
         if (!this.props.signed && window.location.pathname !== "/") {
             window.open("/", "_self");
+        } else {
+            this.props.addUserToState(getUser(this.props.user.id , this.props.addSnackText));
         }
     }
     render() {
