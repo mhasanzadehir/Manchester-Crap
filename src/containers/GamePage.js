@@ -3,7 +3,6 @@ import {addUserToState} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {parseInitializer} from "../init/Parse";
-import {NotificationManager} from 'react-notifications';
 import {
     AVATAR, BIRTH_DATE, CITY, EMAIL, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, SCORE, USER_IDS, USER_NAME,
     USER_PLAY_STATES,
@@ -13,7 +12,8 @@ import ReactDice from 'react-dice-complete'
 import 'react-dice-complete/dist/react-dice-complete.css'
 import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
 import {Avatar} from "material-ui";
-import {getUser} from "../init/ParseInit";
+import {getUser} from "../init/Parse";
+import Background from "../images/map1.jpg"
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
@@ -21,7 +21,11 @@ let query = new Parse.Query(Game);
 let subscription;
 let map = new Map();
 
-
+let sectionStyle = {
+    backgroundImage: `url(${Background})`,
+    backgroundSize: "cover",
+    height: "80%"
+};
 class GamePage extends Component {
     constructor(){
         super();
@@ -103,19 +107,20 @@ class GamePage extends Component {
 
     render() {
         return (
-            <div style={{textAlign : 'center', padding : '20px'}} >
-                <img src={require('../images/map1.jpg')} width={'60%'} height={'600px'} />
-                {this.state.users.map((item, i) => {
-                    console.log("Test" + i, this.state.userPositions);
-                    console.log("Test2 " , map.get(this.state.userPositions[i]));
-                    let ml = map.get(this.state.userPositions[i]) * -1;
-                    let mt = map.get(this.state.userPositions[i]) * -1;
-                    let avatarStyle = {
-                        marginLeft : {ml},
-                        marginTop : {mt}
-                    };
-                    return (<span style={avatarStyle}><Avatar src={item.avatar} /></span>)
-                })}
+            <div style={{textAlign : 'center',height:"100%", padding : '20px' , boxShadow: "inset 0 0 0 3000px rgba(255,255,255,0.6)"}} >
+                <div style={sectionStyle}>
+                    {this.state.users.map((item, i) => {
+                        console.log("Test" + i, this.state.userPositions);
+                        console.log("Test2 " , map.get(this.state.userPositions[i]));
+                        let ml = map.get(this.state.userPositions[i]) * -1;
+                        let mt = map.get(this.state.userPositions[i]) * -1;
+                        let avatarStyle = {
+                            marginLeft : {ml},
+                            marginTop : {mt}
+                        };
+                        return (<span style={avatarStyle}><Avatar src={item.avatar} /></span>)
+                    })}
+                </div>
                 <div>
                     <ReactDice
                         numDice={1}

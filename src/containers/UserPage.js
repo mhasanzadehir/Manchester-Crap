@@ -3,19 +3,17 @@ import {addBotToGame, parseInitializer, startNormalGame, waitForJoinLiveQuery} f
 import {connect} from 'react-redux'
 import {addGameIdToState, addGameIndexToState, addSnackText, addUserToState, closeDialog, showDialog} from "../actions";
 import {bindActionCreators} from 'redux'
-import {
-    IS_PEND, OBJECT_ID, USER_IDS, USER_PLAY_STATES, USER_POSITIONS
-} from "../constansts/DBColumn";
-import "../App.css"
 import {FlatButton} from "material-ui";
-import {APP_PRIMARY_COLOR, WAIT_FOR_JOIN_DIALOG} from "../constansts/AppDetail";
-import {buttonThemeColorStyle, openGameFlatButtonLabelStyle} from "../constansts/Styles";
+import {WAIT_FOR_JOIN_DIALOG} from "../constansts/AppDetail";
+import {
+    buttonThemeColorStyle, divMainPageBackground, mainPageButton,
+    openGameFlatButtonLabelStyle
+} from "../constansts/Styles";
 import WaitForJoinDialog from "../components/WaitForJoinDialog";
 
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
-let subscription;
 
 
 class UserPage extends Component {
@@ -79,12 +77,12 @@ class UserPage extends Component {
 
     render() {
         return (
-            <div style={{textAlign: "center", marginTop: "400px"}}>
+            <div style={Object.assign({} , divMainPageBackground)}>
                 <FlatButton
                     onClick={() => {
                         startNormalGame(this.hostNormalGame, this.joinNormalGame, this.props.user.id, this.props.addSnackText)
                     }}
-                    style={Object.assign({}, buttonThemeColorStyle)}
+                    style={Object.assign({},mainPageButton, buttonThemeColorStyle)}
                     labelStyle={openGameFlatButtonLabelStyle}
                     label="Start Game"/>
                 <WaitForJoinDialog remindTime={this.state.remindTime}/>

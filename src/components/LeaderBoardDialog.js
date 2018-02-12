@@ -3,11 +3,15 @@ import {addSnackText, addUserToState, closeDialog, closeSnackText, setFetchUsers
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {getUsersForLeaderBoard, parseInitializer} from "../init/Parse";
-import {DatePicker, Dialog, FlatButton, RadioButton, RadioButtonGroup, RaisedButton, TextField} from "material-ui";
+import {
+    DatePicker, Dialog, FlatButton, List, ListItem, RadioButton, RadioButtonGroup, RaisedButton,
+    TextField
+} from "material-ui";
 import PlayerLeaderBoard from "./PlayerLeaderBoard";
-import {SCORE} from "../constansts/DBColumn";
+import {FIRST_NAME, LAST_NAME, SCORE} from "../constansts/DBColumn";
 import {LEADER_BOARD_DIALOG} from "../constansts/AppDetail";
 import {buttonThemeColorStyle} from "../constansts/Styles";
+import AvatarImage from "./AvatarImage";
 
 let Parse = parseInitializer();
 const User = Parse.Object.extend("User");
@@ -17,32 +21,22 @@ class LeaderBoardDialog extends Component {
     constructor() {
         super();
         this.state = {
-            data: null
+            users: null
         };
-
+        this.setData = this.setData.bind(this);
     }
 
-    fetchData(){
-        let query = new Parse.Query(User);
-        query.descending(SCORE);
-        query.find({
-            success: (object) => {
-                this.setState({data: object});
-            }
-            ,
-            error: function (error) {
-                addSnackText("Error: " + error.code + " " + error.message)
-            }
-        });
+    setData(users) {
+        this.setState({users: users})
     }
 
 
     render() {
-        if (this.props.fetchUsersData){
-            this.fetchData();
+        if (this.props.fetchUsersData) {
+            getUsersForLeaderBoard(this.setData, this.props.addSnackText);
             this.props.setFetchUsersData(false);
         }
-        if (this.state.data === undefined || this.state.data == null){
+        if (this.state.users === undefined || this.state.users == null) {
             return null;
         }
         return (
@@ -50,25 +44,23 @@ class LeaderBoardDialog extends Component {
                 contentStyle={{textAlign: "center", width: "350px"}}
                 title="Leader Board"
                 autoScrollBodyContent={true}
-                actions={
-                    <div>
-                        <RaisedButton
-                            style={Object.assign({} , buttonThemeColorStyle)}
-                            label="Cancel"
-                            primary={true}
-                            onClick={() => {
-                                this.props.closeDialog()
-                            }}
-                        />
-                    </div>
-                }
                 modal={false}
                 open={this.props.dialog === LEADER_BOARD_DIALOG}
                 onRequestClose={() => {
                     this.props.closeDialog()
                 }}
             >
-                <PlayerLeaderBoard users={this.state.data}/>
+                <List>
+                    {this.state.users.map((item) => {
+                        if (item.avatar != null) {
+                            return <ListItem
+                                leftAvatar={<AvatarImage user={item}/>}
+                                primaryText={item.firstName + " " + item.lastName}
+                                secondaryText={item.score}
+                            />
+                        }
+                    })}
+                </List>
             </Dialog>
 
         );

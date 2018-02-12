@@ -17,6 +17,8 @@ import LeftDrawer from "../components/LeftDrawer";
 import EditProfileDialog from "../components/EditProfileDialog";
 import UserPage from "./UserPage";
 import LeaderBoardDialog from "../components/LeaderBoardDialog";
+import ShowProfileDialog from "../components/ShowProfileDialog";
+import {mainDiv} from "../constansts/Styles";
 
 
 class App extends Component {
@@ -32,7 +34,7 @@ class App extends Component {
     }
     render() {
         return (
-            <div>
+            <div style={Object.assign({} , mainDiv)}>
                 <AppBar
                     title={APP_NAME}
                     style={{backgroundColor : APP_PRIMARY_COLOR}}
@@ -42,10 +44,7 @@ class App extends Component {
                     iconElementRight={<AppBarSign/>}
                 />
                 <LeftDrawer/>
-                <SignInDialog/>
-                <SignUpDialog/>
-                <EditProfileDialog/>
-                <LeaderBoardDialog/>
+                <ShowProfileDialog/>
                 <Switch>
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/GamePage" component={GamePage}/>

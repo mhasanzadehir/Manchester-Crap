@@ -13,7 +13,7 @@ function render() {
         <Provider store={store}>
             <BrowserRouter>
                 <MuiThemeProvider>
-                    <App/>
+                    <App />
                 </MuiThemeProvider>
             </BrowserRouter>
         </Provider>,

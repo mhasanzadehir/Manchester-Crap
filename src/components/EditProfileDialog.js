@@ -6,7 +6,10 @@ import {getUser, setUserInfo} from "../init/Parse";
 import {DatePicker, Dialog, FlatButton, RadioButton, RadioButtonGroup, RaisedButton, TextField} from "material-ui";
 import {EDIT_PROFILE_DIALOG} from "../constansts/AppDetail";
 import {buttonThemeColorStyle} from "../constansts/Styles";
+import {parseInitializer} from "../init/Parse";
+import $ from "jquery";
 
+let Parse = parseInitializer();
 
 class EditProfileDialog extends Component {
     constructor() {
@@ -19,13 +22,16 @@ class EditProfileDialog extends Component {
             city: "",
             birthDate: new Date(),
             gender: true,
+            pictures: {},
         };
         this.onChangeText = this.onChangeText.bind(this);
         this.onChangeGender = this.onChangeGender.bind(this);
         this.onChangeDate = this.onChangeDate.bind(this);
         this.submit = this.submit.bind(this);
+        this.onChangeAvatar = this.onChangeAvatar.bind(this);
     }
-    componentDidMount(){
+
+    componentDidMount() {
         this.getUserState();
     }
 
@@ -46,13 +52,13 @@ class EditProfileDialog extends Component {
         this.setState(state);
     }
 
-    onChangeDate(event, date){
+    onChangeDate(event, date) {
         this.setState({
             birthDate: date,
         });
     };
 
-    onChangeGender(event, value){
+    onChangeGender(event, value) {
         this.setState({
             gender: (value === "true"),
         });
@@ -65,8 +71,18 @@ class EditProfileDialog extends Component {
         this.props.closeDialog();
     }
 
+    onChangeAvatar() {
+        let fileUploadControl = $("#profilePhotoFileUpload")[0];
+        if (fileUploadControl.files.length > 0) {
+            let file = fileUploadControl.files[0];
+            let name = "photo.jpg";
+            let parseFile = new Parse.File(name, file);
+            this.setState({pictures : parseFile});
+        }
+    }
+
     render() {
-        if (this.state.id !== this.props.user.id){
+        if (this.state.id !== this.props.user.id) {
             this.getUserState();
         }
         return (
@@ -84,7 +100,7 @@ class EditProfileDialog extends Component {
                             }}
                         />
                         <RaisedButton
-                            style={Object.assign({} , buttonThemeColorStyle)}
+                            style={Object.assign({}, buttonThemeColorStyle)}
                             label="Submit"
                             primary={true}
                             onClick={() => {
@@ -99,6 +115,11 @@ class EditProfileDialog extends Component {
                     this.props.closeDialog()
                 }}
             >
+
+                {/*<input type="file" id="profilePhotoFileUpload" onChange={this.onChange}/>*/}
+                <FlatButton primary={true} label="Choose an Image">
+                    <input  type="file" id="profilePhotoFileUpload" onChange={this.onChangeAvatar}/>
+                </FlatButton>
                 <TextField
                     name="firstName"
                     hintText="First Name"
@@ -128,7 +149,7 @@ class EditProfileDialog extends Component {
                     onChange={this.onChangeGender}
                     name="gender"
                     defaultSelected={this.state.gender === undefined ? null : this.state.gender.toString()}
-                    style={{width: "80%" , textAline:"center" , marginLeft:"20%"}}>
+                    style={{width: "80%", textAline: "center", marginLeft: "20%"}}>
                     <RadioButton
                         value="true"
                         label="Male"
@@ -148,10 +169,8 @@ class EditProfileDialog extends Component {
                 />
 
             </Dialog>
-
         );
     }
-
 }
 
 const mapStateToProps = function (state) {

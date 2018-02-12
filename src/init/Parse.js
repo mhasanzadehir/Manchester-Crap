@@ -1,8 +1,10 @@
 import {
+    AVATAR,
     BIRTH_DATE, BOT_ID, CITY, EMAIL, FIRST_NAME, GENDER, IS_PEND, LAST_NAME, OBJECT_ID, PASSWORD, PLAYER, SCORE,
     USER_IDS,
     USER_NAME, USER_PLAY_STATES, USER_POSITIONS
 } from "../constansts/DBColumn";
+import {PROFILE_IMAGE_BASE_64} from "../constansts/Base64s";
 
 const APP_ID = "myAppId123456";
 const JAVASCRIPT_KEY = '1xoWtDkxw8oZvX3bzhdTuHU7KZB8SGZD9jWQ2V9p';
@@ -25,7 +27,6 @@ const Player = Parse.Object.extend("Player");
 const User = Parse.Object.extend("User");
 const Game = Parse.Object.extend("Game");
 
-
 export function parseSignIn(state, success, addSnackText) {
     Parse.User.logIn(state.username, state.password, {
         success: (user) => {
@@ -39,6 +40,7 @@ export function parseSignIn(state, success, addSnackText) {
 }
 
 export function parseSignUp(state, success, addSnackText) {
+    let imageFile = new Parse.File("profileImage.jpg", {base64: PROFILE_IMAGE_BASE_64});
     let user = new Parse.User();
     user.set(USER_NAME, state.username);
     user.set(EMAIL, state.email);
@@ -49,6 +51,7 @@ export function parseSignUp(state, success, addSnackText) {
     user.set(GENDER, true);
     user.set(BIRTH_DATE, new Date());
     user.set(SCORE, 0);
+    user.set(AVATAR, imageFile);
     user.signUp(null, {
         success: (user) => {
             addSnackText("You sign up successfully");
@@ -60,28 +63,58 @@ export function parseSignUp(state, success, addSnackText) {
     });
 }
 
+export function setUserFields(user, object) {
+    user.id = object.id;
+    user.username = object.get(USER_NAME);
+    user.email = object.get(EMAIL);
+    user.firstName = object.get(FIRST_NAME);
+    user.lastName = object.get(LAST_NAME);
+    user.city = object.get(CITY);
+    user.birthDate = object.get(BIRTH_DATE);
+    user.gender = object.get(GENDER);
+    user.avatar = object.get(AVATAR);
+    user.score = object.get(SCORE);
+}
+
 export function getUser(userId, addSnackText) {
     let user = {};
     let query = new Parse.Query(User);
     query.equalTo(OBJECT_ID, userId);
-    query.first({
+    (new Promise(function (resolve) {
+        query.first({
+            success: (object) => {
+                setUserFields(user, object);
+                resolve(user)
+            }
+            ,
+            error: function (error) {
+                addSnackText("Error: " + error.code + " " + error.message);
+            }
+        });
+    })).then(function (user) {
+        return user;
+    });
+
+    return user;
+}
+
+export function getUsersForLeaderBoard(setData, addSnackText) {
+    let query = new Parse.Query(User);
+    query.find({
         success: (object) => {
-            user.id = object.id;
-            user.username = object.get(USER_NAME);
-            user.email = object.get(EMAIL);
-            user.firstName = object.get(FIRST_NAME);
-            user.lastName = object.get(LAST_NAME);
-            user.city = object.get(CITY);
-            user.birthDate = object.get(BIRTH_DATE);
-            user.gender = object.get(GENDER);
-            // user.score = object.get(SCORE);
+            let users = [];
+            object.map((item) => {
+                let user = {};
+                setUserFields(user, item);
+                users.push(user);
+            });
+            setData(users);
         }
         ,
         error: function (error) {
-            addSnackText("Error: " + error.code + " " + error.message);
+            addSnackText("Error: " + error.code + " " + error.message)
         }
     });
-    return user;
 }
 
 export function setUserInfo(state, addSnackText) {
@@ -94,25 +127,13 @@ export function setUserInfo(state, addSnackText) {
             object.set(CITY, state.city);
             object.set(BIRTH_DATE, state.birthDate);
             object.set(GENDER, state.gender);
+            console.log(state.pictures);
+            object.set(AVATAR, state.pictures);
             object.save();
         }
         ,
         error: function (error) {
             addSnackText("Error: " + error.code + " " + error.message);
-        }
-    });
-}
-
-export function getUsersForLeaderBoard(setState, addSnackText) {
-    let query = new Parse.Query(User);
-    query.descending(SCORE);
-    query.find({
-        success: (object) => {
-            setState({data: object});
-        }
-        ,
-        error: function (error) {
-            addSnackText("Error: " + error.code + " " + error.message)
         }
     });
 }

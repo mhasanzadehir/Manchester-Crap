@@ -16,6 +16,12 @@ import {
     SIGN_UP_DIALOG
 } from "../constansts/AppDetail";
 import {flatButtonDivStyle, flatButtonLabelStyle} from "../constansts/Styles";
+import AvatarImage from "./AvatarImage";
+import EditProfileDialog from "./EditProfileDialog";
+import LeaderBoardDialog from "./LeaderBoardDialog";
+import SignInDialog from "./SignInDialog";
+import SignUpDialog from "./SignUpDialog";
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 class AppBarSign extends Component {
     constructor() {
@@ -34,13 +40,15 @@ class AppBarSign extends Component {
     render() {
         if (!this.props.signed) {
             return (
-                <div style={flatButtonDivStyle} >
+                <div style={flatButtonDivStyle}>
                     <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
                         this.props.showDialog(SIGN_UP_DIALOG)
                     }} label="Sign Up"/>
                     <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {
                         this.props.showDialog(SIGN_IN_DIALOG)
                     }} label="Sign In"/>
+                    <SignInDialog/>
+                    <SignUpDialog/>
                 </div>
             )
         }
@@ -52,22 +60,7 @@ class AppBarSign extends Component {
                     this.props.setFetchUsersData(true);
                     this.props.showDialog(LEADER_BOARD_DIALOG)
                 }} label="Leader Board"/>
-                <IconMenu
-                    iconButtonElement={
-                        <IconButton tooltip={this.props.username}>
-                            <AccountCircle color="white"/>
-                        </IconButton>
-                    }
-                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                >
-                    <MenuItem
-                        onClick={() => {this.props.showDialog(EDIT_PROFILE_DIALOG)}}
-                        primaryText="Edit profile"/>
-                    <MenuItem
-                        onClick={() => {this.signOut()}}
-                        primaryText="Sign out"/>
-                </IconMenu>
+                <AvatarImage user={this.props.user}/>
                 {/*<IconMenu*/}
                 {/*iconButtonElement={<IconButton tooltip="Notifications"><NotificationsIcon color="white" /></IconButton>}*/}
                 {/*anchorOrigin={{horizontal: 'right', vertical: 'top'}}*/}
@@ -77,7 +70,27 @@ class AppBarSign extends Component {
                 {/*<MenuItem primaryText="Help" />*/}
                 {/*<MenuItem primaryText="Sign out" />*/}
                 {/*</IconMenu>*/}
-                <IconButton tooltip="Notifications"><NotificationsIcon color="white"/></IconButton>
+                {/*<IconButton tooltip="Notifications"><NotificationsIcon color="white"/></IconButton>*/}
+                <IconMenu
+                    iconButtonElement={
+                        <IconButton tooltip="More option"><MoreVertIcon color="white"/></IconButton>
+                    }
+                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+                    <MenuItem
+                        onClick={() => {
+                            this.props.showDialog(EDIT_PROFILE_DIALOG)
+                        }}
+                        primaryText="Edit profile"/>
+                    <MenuItem
+                        onClick={() => {
+                            this.signOut()
+                        }}
+                        primaryText="Sign out"/>
+                </IconMenu>
+                <EditProfileDialog/>
+                <LeaderBoardDialog/>
             </div>
         );
     }
@@ -87,7 +100,7 @@ class AppBarSign extends Component {
 
 const mapStateToProps = function (state) {
     return {
-        username: state.user.username,
+        user: state.user,
         signed: state.pageStatus.signed,
     };
 };

@@ -1,4 +1,5 @@
 export const ADD_USER = 'ADD_USER';
+export const ADD_HELPING_USER = 'ADD_HELPING_USER';
 export const ADD_GAME_ID = 'ADD_GAME_ID';
 export const ADD_GAME_INDEX = 'ADD_GAME_INDEX';
 export const ADD_SNACK_TEXT = 'ADD_SNACK_TEXT';
@@ -15,6 +16,13 @@ export const SET_FETCH_USERS_DATA = "SET_FETCH_USERS_DATA";
 export function addUserToStateUnsafe(user) {
     return {
         type: ADD_USER,
+        user
+    };
+}
+
+export function addHelpingUserToStateUnsafe(user) {
+    return {
+        type: ADD_HELPING_USER,
         user
     };
 }
@@ -101,6 +109,18 @@ export function defaultState() {
             city: "",
             birthDate: new Date(),
             gender: true,
+            avatar: null,
+            score: 0,
+        },
+        helpingUser: {
+            username: "",
+            firstName: "",
+            lastName: "",
+            city: "",
+            birthDate: new Date(),
+            gender: true,
+            avatar: null,
+            score: 0,
         },
         game: {
             index: -1,

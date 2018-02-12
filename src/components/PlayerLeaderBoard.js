@@ -6,6 +6,7 @@ import Divider from 'material-ui/Divider';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import {parseInitializer} from "../init/Parse";
 import {AVATAR, FIRST_NAME, LAST_NAME, SCORE} from "../constansts/DBColumn";
+import AvatarImage from "./AvatarImage";
 
 let Parse = parseInitializer();
 
@@ -26,13 +27,12 @@ class PlayerLeaderBoard extends Component {
         return (
             <div>
                 <List>
-                    <Subheader>Leader Board</Subheader>
                     {this.state.data.map(function(item, i){
                         if (item.get(FIRST_NAME)) {
                             return <ListItem
                                 key={i}
                                 primaryText={item.get(FIRST_NAME) + " " + item.get(LAST_NAME)}
-                                leftAvatar={<Avatar src={item.get(AVATAR)._url} />}
+                                leftAvatar={<AvatarImage user={item}/>}
                                 secondaryText={item.get(SCORE)}
                                 />
                         }

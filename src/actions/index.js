@@ -1,12 +1,19 @@
 import {
     addSnackTextUnsafe, addGameIdToStateUnsafe, addGameIndexToStateUnsafe,
     addUserToStateUnsafe, closeSnackTextUnsafe, showDialogUnsafe,
-    closeDialogUnsafe, signInUnsafe, signOutUnsafe, setLeftDrawerUnsafe, setLoadingUnsafe, setFetchUsersDataUnsafe
+    closeDialogUnsafe, signInUnsafe, signOutUnsafe, setLeftDrawerUnsafe, setLoadingUnsafe, setFetchUsersDataUnsafe,
+    addHelpingUserToStateUnsafe
 } from "../constansts/ActionTypes";
 
 export function addUserToState(user) {
     return function (dispatch) {
         dispatch(addUserToStateUnsafe(user));
+    };
+}
+
+export function addHelpingUserToState(user) {
+    return function (dispatch) {
+        dispatch(addHelpingUserToStateUnsafe(user));
     };
 }
 
