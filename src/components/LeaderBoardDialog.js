@@ -52,6 +52,8 @@ class LeaderBoardDialog extends Component {
             >
                 <List>
                     {this.state.users.map((item) => {
+                        console.log("TESTIIIITT", item);
+
                         if (item.avatar != null) {
                             return <ListItem
                                 leftAvatar={<AvatarImage user={item}/>}

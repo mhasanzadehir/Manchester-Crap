@@ -17,9 +17,6 @@ class AppBarSign extends Component {
         this.avatarOnClick = this.avatarOnClick.bind(this);
     }
     avatarOnClick(){
-        console.log(this.props.user);
-        this.props.addHelpingUserToState(this.props.user);
-        console.log(this.props.user);
         this.props.showDialog(SHOW_PROFILE_DIALOG)
     }
 
@@ -44,7 +41,6 @@ const mapStateToProps = function (state) {
     return {
         username: state.user.username,
         signed: state.pageStatus.signed,
-        user: state.helpingUser,
     };
 };
 
