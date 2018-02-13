@@ -21,12 +21,14 @@ export default function (state = null, action) {
         case type.SHOW_DIALOG:
             return {
                 ...state,
+                blurBackground: 20,
                 dialog: action.dialog,
             };
         case type.CLOSE_DIALOG:
             return {
                 ...state,
                 dialog: "",
+                blurBackground: 0,
             };
         case type.SIGN_IN:
             return {
@@ -36,7 +38,8 @@ export default function (state = null, action) {
         case type.SIGN_OUT:
             return {
                 ...state,
-                signed: false
+                signed: false,
+                blurBackground: 0,
             };
         case type.SET_LEFT_DRAWER:
             return {
@@ -44,14 +47,19 @@ export default function (state = null, action) {
                 leftDrawer: action.state
             };
         case type.SET_LOADING:
-            return{
+            return {
                 ...state,
                 loading: action.state
             };
         case type.SET_FETCH_USERS_DATA:
-            return{
+            return {
                 ...state,
                 fetchUsersData: action.state
+            };
+        case type.SET_BLUR_BACKGROUND:
+            return {
+                ...state,
+                blurBackground: action.blurBackground,
             };
         default:
             return state;

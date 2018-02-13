@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
 import {addBotToGame, parseInitializer, startNormalGame, waitForJoinLiveQuery} from "../init/Parse";
 import {connect} from 'react-redux'
-import {addGameIdToState, addGameIndexToState, addSnackText, addUserToState, closeDialog, showDialog} from "../actions";
+import {
+    addGameIdToState, addGameIndexToState, addSnackText, addUserToState, closeDialog, setBlurBackground,
+    showDialog
+} from "../actions";
 import {bindActionCreators} from 'redux'
 import {FlatButton} from "material-ui";
 import {WAIT_FOR_JOIN_DIALOG} from "../constansts/AppDetail";
 import {
-    buttonThemeColorStyle, divMainPageBackground, mainPageButton,
+    buttonThemeColorStyle, divMainPage, divMainPageBlurBackground, mainPageButton,
     openGameFlatButtonLabelStyle
 } from "../constansts/Styles";
 import WaitForJoinDialog from "../components/WaitForJoinDialog";
@@ -35,6 +38,13 @@ class UserPage extends Component {
 
     componentDidMount() {
         this.props.closeDialog();
+        this.props.setBlurBackground(0);
+        let blurAnimation = setInterval(() => {
+            if (this.props.blurBackground === 5){
+                clearInterval(blurAnimation)
+            }
+            this.props.setBlurBackground((this.props.blurBackground*10 + 1)/10);
+        }, 10)
     }
 
     setIsPend(isPend) {
@@ -77,7 +87,8 @@ class UserPage extends Component {
 
     render() {
         return (
-            <div style={Object.assign({} , divMainPageBackground)}>
+            <div style={Object.assign({} , divMainPage)}>
+                <div id="BlurBackground" style={Object.assign({} , divMainPageBlurBackground(this.props.blurBackground))}/>
                 <FlatButton
                     onClick={() => {
                         startNormalGame(this.hostNormalGame, this.joinNormalGame, this.props.user.id, this.props.addSnackText)
@@ -106,7 +117,8 @@ Parse.LiveQuery.on('error', (error) => {
 const mapStateToProps = function (state) {
     return {
         gameId: state.game.gameId,
-        user: state.user
+        user: state.user,
+        blurBackground: state.pageStatus.blurBackground,
     };
 };
 
@@ -118,6 +130,7 @@ const mapDispatchToProps = function (dispatch) {
         addSnackText,
         showDialog,
         closeDialog,
+        setBlurBackground,
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage);

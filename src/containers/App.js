@@ -5,7 +5,8 @@ import AppBar from 'material-ui/AppBar';
 import {Snackbar} from "material-ui";
 import AppBarSign from "../components/AppBarSign";
 import {
-    addSnackText, addUserToState, closeSnackText, setLeftDrawer, showDialog, signOut
+    addHelpingUserToState,
+    addSnackText, addUserToState, closeDialog, closeSnackText, setLeftDrawer, showDialog, signOut
 } from "../actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -20,6 +21,7 @@ import LeaderBoardDialog from "../components/LeaderBoardDialog";
 import ShowProfileDialog from "../components/ShowProfileDialog";
 import {mainDiv} from "../constansts/Styles";
 import {getUser} from "../init/Parse";
+import {addHelpingUserToStateUnsafe} from "../constansts/ActionTypes";
 
 
 class App extends Component {
@@ -29,6 +31,7 @@ class App extends Component {
     }
 
     componentDidMount() {
+        this.props.closeDialog();
         if (!this.props.signed && window.location.pathname !== "/") {
             window.open("/", "_self");
         } else {
@@ -80,7 +83,9 @@ const mapDispatchToProps = function (dispatch) {
         addSnackText: addSnackText,
         closeSnackText: closeSnackText,
         addUserToState: addUserToState,
+        addHelpingUserToState: addHelpingUserToState,
         showDialog: showDialog,
+        closeDialog: closeDialog,
         setLeftDrawer: setLeftDrawer,
         signOut: signOut,
         // setLoading: setLoading,

@@ -12,40 +12,8 @@ import {AVATAR, FIRST_NAME, LAST_NAME, SCORE} from "../constansts/DBColumn";
 class ShowProfileDialog extends Component {
     constructor() {
         super();
-        this.state = {
-            username: "",
-            password: ""
-        };
-
-        this.onChange = this.onChange.bind(this);
-        this.signInSuccess = this.signInSuccess.bind(this);
+        this.state = {};
     }
-
-    onChange(event) {
-        const state = this.state;
-        state[event.target.name] = event.target.value;
-        this.setState(state);
-    }
-
-    signInSuccess(user) {
-        this.props.addUserToState(getUser(user.id, this.props.addSnackText));
-        this.props.closeDialog();
-        this.props.signIn();
-        // this.props.addUserToState(user);
-        // this.setState({redirect: true});
-        // event.preventDefault();
-        // Parse.User.logIn(this.state.username, this.state.password, {
-        //     success: (user) => {
-        //         NotificationManager.success("salam", "salam");
-        //         this.props.addUserToState(user);
-        //         this.setState({redirect: true});
-        //     },
-        //     error: (user, error) => {
-        //         NotificationManager.error(error.message);
-        //     }
-        // });
-    }
-
 
     render() {
         return (
@@ -87,11 +55,7 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = function (dispatch) {
     return bindActionCreators({
         addSnackText: addSnackText,
-        closeSnackText: closeSnackText,
-        showDialog: showDialog,
         closeDialog: closeDialog,
-        addUserToState: addUserToState,
-        signIn: signIn,
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ShowProfileDialog);

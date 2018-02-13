@@ -29,8 +29,8 @@ export const gameMapDiv = {
     margin: "0",
 };
 
-export const divMainPageBackground = {
-    backgroundImage: "url(" + MainPageBackground + ")",
+export const divMainPage = {
+    // backgroundImage: "url(" + MainPageBackground + ")",
     backgroundSize: "cover",
     height: window.innerHeight,
     width: window.innerWidth,
@@ -39,6 +39,18 @@ export const divMainPageBackground = {
     gridTemplateColumns: "37% 30% 33%",
     gridTemplateRows: "70% 20% 10%"
 };
+
+export function divMainPageBlurBackground(blur) {
+    return {
+        backgroundImage: "url(" + MainPageBackground + ")",
+        backgroundSize: "cover",
+        filter: "blur("+blur+"px)",
+        height: window.innerHeight,
+        width: window.innerWidth,
+        margin: "0",
+        zIndex: -1,
+    }
+}
 
 export const mainPageButton = {
     gridColumn: "2 / 3",

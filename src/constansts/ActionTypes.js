@@ -11,6 +11,7 @@ export const SIGN_IN = "SIGN_IN";
 export const SIGN_OUT = "SIGN_OUT";
 export const SET_LEFT_DRAWER = "CLOSE_LEFT_DRAWER";
 export const SET_FETCH_USERS_DATA = "SET_FETCH_USERS_DATA";
+export const SET_BLUR_BACKGROUND = "SET_BLUR_BACKGROUND";
 
 
 export function addUserToStateUnsafe(user) {
@@ -100,6 +101,13 @@ export function setFetchUsersDataUnsafe(state) {
     }
 }
 
+export function setBlurBackgroundUnsafe(blurBackground) {
+    return {
+        type: SET_BLUR_BACKGROUND,
+        blurBackground: blurBackground
+    }
+}
+
 export function defaultState() {
     return {
         user: {
@@ -136,6 +144,7 @@ export function defaultState() {
             leftDrawer: false,
             loading: true,
             fetchUsersData: false,
+            blurBackground: 0,
         }
     }
 }

@@ -16,19 +16,26 @@ class AppBarSign extends Component {
         this.state = {};
         this.avatarOnClick = this.avatarOnClick.bind(this);
     }
-    avatarOnClick(){
+
+    componentDidUpdate() {
+        console.log("slam");
+    }
+
+    avatarOnClick() {
+        this.props.addHelpingUserToState(this.props.user);
         this.props.showDialog(SHOW_PROFILE_DIALOG)
     }
 
     render() {
-        if (!this.props.user){
+        console.log("lalal", this.props.user);
+        if (!this.props.user) {
             return null;
         }
         return (
             <IconButton onClick={this.avatarOnClick}
-                tooltip={this.props.user.username}>
-                {this.props.user.avatar == null?
-                    <AccountCircle color="white"/>:
+                        tooltip={this.props.user.username}>
+                {this.props.user.avatar == null ?
+                    <AccountCircle color="white"/> :
                     <Avatar size={23} src={this.props.user.avatar._url}/>}
             </IconButton>
         );
@@ -39,8 +46,7 @@ class AppBarSign extends Component {
 
 const mapStateToProps = function (state) {
     return {
-        username: state.user.username,
-        signed: state.pageStatus.signed,
+        helpingUser: state.helpingUser,
     };
 };
 

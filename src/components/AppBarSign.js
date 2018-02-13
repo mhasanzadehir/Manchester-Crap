@@ -53,7 +53,7 @@ class AppBarSign extends Component {
             )
         }
 
-
+        console.log("ASKAKD", this.props.user);
         return (
             <div>
                 <FlatButton labelStyle={flatButtonLabelStyle} onClick={() => {

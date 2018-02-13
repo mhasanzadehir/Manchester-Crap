@@ -2,7 +2,7 @@ import {
     addSnackTextUnsafe, addGameIdToStateUnsafe, addGameIndexToStateUnsafe,
     addUserToStateUnsafe, closeSnackTextUnsafe, showDialogUnsafe,
     closeDialogUnsafe, signInUnsafe, signOutUnsafe, setLeftDrawerUnsafe, setLoadingUnsafe, setFetchUsersDataUnsafe,
-    addHelpingUserToStateUnsafe
+    addHelpingUserToStateUnsafe, setBlurBackgroundUnsafe
 } from "../constansts/ActionTypes";
 
 export function addUserToState(user) {
@@ -62,6 +62,12 @@ export function setLeftDrawer(state) {
 export function setFetchUsersData(state) {
     return function (dispatch) {
         dispatch(setFetchUsersDataUnsafe(state))
+    }
+}
+
+export function setBlurBackground(blurBackground) {
+    return function (dispatch) {
+        dispatch(setBlurBackgroundUnsafe(blurBackground))
     }
 }
 
