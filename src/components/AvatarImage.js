@@ -10,7 +10,7 @@ import {Avatar, IconButton} from "material-ui";
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import {SHOW_PROFILE_DIALOG} from "../constansts/AppDetail";
 
-class AppBarSign extends Component {
+class AvatarImage extends Component {
     constructor() {
         super();
         this.state = {};
@@ -36,7 +36,7 @@ class AppBarSign extends Component {
                         tooltip={this.props.user.username}>
                 {this.props.user.avatar == null ?
                     <AccountCircle color="white"/> :
-                    <Avatar size={23} src={this.props.user.avatar._url}/>}
+                    <Avatar size={this.props.size} src={this.props.user.avatar._url}/>}
             </IconButton>
         );
     }
@@ -59,4 +59,4 @@ const mapDispatchToProps = function (dispatch) {
         addHelpingUserToState: addHelpingUserToState
     }, dispatch);
 };
-export default connect(mapStateToProps, mapDispatchToProps)(AppBarSign);
+export default connect(mapStateToProps, mapDispatchToProps)(AvatarImage);

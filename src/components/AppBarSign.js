@@ -60,7 +60,7 @@ class AppBarSign extends Component {
                     this.props.setFetchUsersData(true);
                     this.props.showDialog(LEADER_BOARD_DIALOG)
                 }} label="Leader Board"/>
-                <AvatarImage user={this.props.user}/>
+                <AvatarImage size={23} user={this.props.user}/>
                 {/*<IconMenu*/}
                 {/*iconButtonElement={<IconButton tooltip="Notifications"><NotificationsIcon color="white" /></IconButton>}*/}
                 {/*anchorOrigin={{horizontal: 'right', vertical: 'top'}}*/}

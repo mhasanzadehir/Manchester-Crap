@@ -1,15 +1,19 @@
 import React, {Component} from "react";
-import {addSnackText, addUserToState, closeDialog, closeSnackText, setFetchUsersData, showDialog} from "../actions";
+import {
+    addHelpingUserToState, addSnackText, addUserToState, closeDialog, closeSnackText, setFetchUsersData,
+    showDialog
+} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {getUsersForLeaderBoard, parseInitializer} from "../init/Parse";
 import {
+    Avatar,
     DatePicker, Dialog, FlatButton, List, ListItem, RadioButton, RadioButtonGroup, RaisedButton,
     TextField
 } from "material-ui";
 import PlayerLeaderBoard from "./PlayerLeaderBoard";
 import {FIRST_NAME, LAST_NAME, SCORE} from "../constansts/DBColumn";
-import {LEADER_BOARD_DIALOG} from "../constansts/AppDetail";
+import {LEADER_BOARD_DIALOG, SHOW_PROFILE_DIALOG} from "../constansts/AppDetail";
 import {buttonThemeColorStyle} from "../constansts/Styles";
 import AvatarImage from "./AvatarImage";
 
@@ -29,7 +33,6 @@ class LeaderBoardDialog extends Component {
     setData(users) {
         this.setState({users: users})
     }
-
 
     render() {
         if (this.props.fetchUsersData) {
@@ -53,10 +56,13 @@ class LeaderBoardDialog extends Component {
                 <List>
                     {this.state.users.map((item) => {
                         if (item.avatar != null) {
-                            return <ListItem
-                                leftAvatar={<AvatarImage user={item}/>}
-                                primaryText={item.firstName + " " + item.lastName}
-                                secondaryText={item.score}
+                            return <ListItem onClick={() => {
+                                this.props.addHelpingUserToState(item);
+                                this.props.showDialog(SHOW_PROFILE_DIALOG)}
+                            }
+                                             leftAvatar={<Avatar size={40} src={item.avatar._url}/>}
+                                             primaryText={item.firstName + " " + item.lastName}
+                                             secondaryText={item.score}
                             />
                         }
                     })}
@@ -83,7 +89,8 @@ const mapDispatchToProps = function (dispatch) {
         showDialog: showDialog,
         closeDialog: closeDialog,
         addUserToState: addUserToState,
-        setFetchUsersData: setFetchUsersData
+        setFetchUsersData: setFetchUsersData,
+        addHelpingUserToState: addHelpingUserToState,
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LeaderBoardDialog);

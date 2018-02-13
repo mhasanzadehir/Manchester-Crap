@@ -14,7 +14,10 @@ import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
 import {Avatar} from "material-ui";
 import {getUser} from "../init/Parse";
 import Background from "../images/map1.jpg"
-import {divMainPage, gameMapDiv} from "../constansts/Styles";
+import {
+    diceDiv, divGamePage, divMainPage, divMainPageBlurBackground, gameDetailDiv,
+    gameMapDiv
+} from "../constansts/Styles";
 import AvatarImage from "../components/AvatarImage";
 
 let Parse = parseInitializer();
@@ -130,7 +133,8 @@ class GamePage extends Component {
 
     render() {
         return (
-            <div style={Object.assign({}, divMainPage)}>
+            <div style={Object.assign({}, divGamePage)}>
+                <div style={Object.assign({}, divMainPageBlurBackground(40))}/>
                 <div style={Object.assign({} , gameMapDiv)}>
                     {this.state.users.map((item, i) => {
                         let userPosition = map.get(this.state.userPositions[i]);
@@ -144,10 +148,11 @@ class GamePage extends Component {
                             left: posX + '%',
                             top: posY + '%'
                         };
-                        return (<div style={avatarStyle}><AvatarImage user={item} /></div>)
+                        return (<div style={avatarStyle}><AvatarImage size={50} user={item} /></div>)
                     })}
                 </div>
-                <div>
+                <div style={Object.assign({}, gameDetailDiv)}/>
+                <div style={Object.assign({} , diceDiv)}>
                     <ReactDice
                         numDice={1}
                         rollDone={this.throwTas}
