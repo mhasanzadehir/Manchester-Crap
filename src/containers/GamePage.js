@@ -14,7 +14,8 @@ import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
 import {Avatar} from "material-ui";
 import {getUser} from "../init/Parse";
 import Background from "../images/map1.jpg"
-import {gameMapDiv} from "../constansts/Styles";
+import {divMainPage, gameMapDiv} from "../constansts/Styles";
+import AvatarImage from "../components/AvatarImage";
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
@@ -37,27 +38,49 @@ class GamePage extends Component {
             userPlayStates: [],
         };
         this.throwTas = this.throwTas.bind(this);
-        map.set(1, {x: 35, y: 10});
-        map.set(2, {x: 35, y: 10});
-        map.set(3, {x: 35, y: 10});
-        map.set(4, {x: 35, y: 10});
-        map.set(5, {x: 35, y: 10});
-        map.set(6, {x: 35, y: 10});
-        map.set(7, {x: 35, y: 10});
-        map.set(8, {x: 35, y: 10});
-        map.set(9, {x: 35, y: 10});
-        map.set(10, {x: 35, y: 10});
-        map.set(11, {x: 35, y: 10});
-        map.set(12, {x: 35, y: 10});
-        map.set(13, {x: 35, y: 10});
-        map.set(14, {x: 35, y: 10});
-        map.set(15, {x: 35, y: 10});
-        map.set(16, {x: 35, y: 10});
-        map.set(17, {x: 35, y: 10});
-        map.set(18, {x: 35, y: 10});
-        map.set(19, {x: 35, y: 10});
-        map.set(20, {x: 35, y: 10});
-        map.set(21, {x: 35, y: 10});
+        // map.set(0, {x: 35, y: 10});
+        // map.set(1, {x: 35, y: 10});
+        // map.set(2, {x: 35, y: 10});
+        // map.set(3, {x: 35, y: 10});
+        // map.set(4, {x: 35, y: 10});
+        // map.set(5, {x: 35, y: 10});
+        // map.set(6, {x: 35, y: 10});
+        // map.set(7, {x: 35, y: 10});
+        // map.set(8, {x: 35, y: 10});
+        // map.set(9, {x: 35, y: 10});
+        // map.set(10, {x: 35, y: 10});
+        // map.set(11, {x: 35, y: 10});
+        // map.set(12, {x: 50, y: 10});
+        // map.set(13, {x: 35, y: 10});
+        // map.set(14, {x: 35, y: 10});
+        // map.set(15, {x: 35, y: 10});
+        // map.set(16, {x: 35, y: 10});
+        // map.set(17, {x: 35, y: 10});
+        // map.set(18, {x: 60, y: 10});
+        // map.set(19, {x: 35, y: 10});
+        // map.set(20, {x: 35, y: 10});
+        // map.set(21, {x: 35, y: 10});
+        // map.set(22, {x: 35, y: 10});
+        // map.set(23, {x: 35, y: 10});
+        // map.set(24, {x: 35, y: 10});
+        // map.set(25, {x: 35, y: 10});
+        // map.set(26, {x: 35, y: 10});
+        // map.set(27, {x: 35, y: 10});
+        // map.set(28, {x: 35, y: 10});
+        // map.set(29, {x: 35, y: 10});
+        // map.set(30, {x: 35, y: 10});
+        // map.set(31, {x: 35, y: 10});
+        // map.set(32, {x: 35, y: 10});
+        // map.set(33, {x: 35, y: 10});
+        // map.set(34, {x: 35, y: 10});
+        // map.set(35, {x: 35, y: 10});
+        // map.set(36, {x: 35, y: 10});
+        // map.set(37, {x: 35, y: 10});
+        // map.set(38, {x: 35, y: 10});
+        // map.set(39, {x: 35, y: 10});
+        // map.set(40, {x: 35, y: 10});
+        // map.set(41, {x: 35, y: 10});
+        // map.set(42, {x: 35, y: 10});
     }
 
     componentDidMount(){
@@ -70,7 +93,7 @@ class GamePage extends Component {
                 for (let id of userIds) {
                     users.push(getUser(id));
                 }
-                this.setState({userIds : userIds, users : users})
+                this.setState({userIds : userIds, users : users, userPositions: game.get(USER_POSITIONS)})
             }
             ,
             error: function (error) {
@@ -78,7 +101,6 @@ class GamePage extends Component {
             }
         });
         subscription = query.subscribe();
-        // query.unsubscribe()
         subscription.on('update', (object) => {
             this.setState({
                 userPositions: object.get(USER_POSITIONS),
@@ -108,18 +130,21 @@ class GamePage extends Component {
 
     render() {
         return (
-            <div style={{textAlign : 'center',height:"100%", padding : '20px' , boxShadow: "inset 0 0 0 3000px rgba(255,255,255,0.6)"}} >
+            <div style={Object.assign({}, divMainPage)}>
                 <div style={Object.assign({} , gameMapDiv)}>
                     {this.state.users.map((item, i) => {
-                        console.log("Test" + i, this.state.userPositions);
-                        console.log("Test2 " , map.get(this.state.userPositions[i]));
-                        let ml = map.get(this.state.userPositions[i]) * -1;
-                        let mt = map.get(this.state.userPositions[i]) * -1;
+                        let userPosition = map.get(this.state.userPositions[i]);
+                        let posX, posY = 0;
+                        if (userPosition !== undefined) {
+                             posX = userPosition['x'];
+                             posY = userPosition['y'];
+                        }
                         let avatarStyle = {
-                            marginLeft : {ml},
-                            marginTop : {mt}
+                            position: 'absolute',
+                            left: posX + '%',
+                            top: posY + '%'
                         };
-                        return (<span style={avatarStyle}><Avatar src={item.avatar} /></span>)
+                        return (<div style={avatarStyle}><AvatarImage user={item} /></div>)
                     })}
                 </div>
                 <div>
