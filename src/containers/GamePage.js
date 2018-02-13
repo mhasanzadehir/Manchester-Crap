@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {addUserToState} from "../actions";
+import {addHelpingUserToState, addUserToState, showDialog} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {parseInitializer} from "../init/Parse";
@@ -10,8 +10,8 @@ import {
 } from "../constansts/DBColumn";
 import ReactDice from 'react-dice-complete'
 import 'react-dice-complete/dist/react-dice-complete.css'
-import {APP_PRIMARY_COLOR} from "../constansts/AppDetail";
-import {Avatar} from "material-ui";
+import {APP_PRIMARY_COLOR, SHOW_PROFILE_DIALOG} from "../constansts/AppDetail";
+import {Avatar, List, ListItem} from "material-ui";
 import {getUser} from "../init/Parse";
 import Background from "../images/map1.jpg"
 import {
@@ -26,13 +26,8 @@ let query = new Parse.Query(Game);
 let subscription;
 let map = new Map();
 
-let sectionStyle = {
-    backgroundImage: `url(${Background})`,
-    backgroundSize: "cover",
-    height: "80%"
-};
 class GamePage extends Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
             users: [],
@@ -41,8 +36,8 @@ class GamePage extends Component {
             userPlayStates: [],
         };
         this.throwTas = this.throwTas.bind(this);
-        for(let i = 0; i <= 50; i++){
-            map.set(i, {x : i, y: i});
+        for (let i = 0; i <= 50; i++) {
+            map.set(i, {x: i, y: i});
         }
         // map.set(0, {x: 35, y: 10});
         // map.set(1, {x: 35, y: 10});
@@ -89,7 +84,7 @@ class GamePage extends Component {
         // map.set(42, {x: 35, y: 10});
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log(this.props.gameId);
         query.equalTo(OBJECT_ID, this.props.gameId);
         query.first({
@@ -99,7 +94,7 @@ class GamePage extends Component {
                 for (let id of userIds) {
                     users.push(getUser(id));
                 }
-                this.setState({userIds : userIds, users : users, userPositions: game.get(USER_POSITIONS)})
+                this.setState({userIds: userIds, users: users, userPositions: game.get(USER_POSITIONS)})
             }
             ,
             error: function (error) {
@@ -115,7 +110,7 @@ class GamePage extends Component {
         });
     }
 
-    throwTas(rand){
+    throwTas(rand) {
         query.first({
             success: (game) => {
                 let positions = game.get(USER_POSITIONS);
@@ -123,12 +118,12 @@ class GamePage extends Component {
                 let index = this.props.index;
                 positions[index] += rand;
                 playStates[index] = true;
-                playStates[(index+1) % playStates.length] = false;
-                game.set(USER_POSITIONS , positions);
-                game.set(USER_PLAY_STATES , playStates);
+                playStates[(index + 1) % playStates.length] = false;
+                game.set(USER_POSITIONS, positions);
+                game.set(USER_PLAY_STATES, playStates);
                 game.save();
             },
-            error: function(error) {
+            error: function (error) {
                 alert("Error: " + error.code + " " + error.message);
             }
         });
@@ -138,25 +133,41 @@ class GamePage extends Component {
         return (
             <div style={Object.assign({}, divGamePage)}>
                 <div style={Object.assign({}, divMainPageBlurBackground(40))}/>
-                <div style={Object.assign({} , gameMapDiv)}>
+                <div style={Object.assign({}, gameMapDiv)}>
                     {this.state.users.map((item, i) => {
                         console.log("Render Called!!! " + i);
                         let userPosition = map.get(this.state.userPositions[i]);
                         let posX, posY = 0;
                         if (userPosition !== undefined) {
-                             posX = userPosition['x'];
-                             posY = userPosition['y'];
+                            posX = userPosition['x'];
+                            posY = userPosition['y'];
                         }
                         let avatarStyle = {
                             position: 'absolute',
                             left: posX + '%',
                             top: posY + '%'
                         };
-                        return (<div style={avatarStyle}><AvatarImage size={50} user={item} /></div>)
+                        return (<div style={avatarStyle}><AvatarImage size={40} user={item}/></div>)
                     })}
                 </div>
-                <div style={Object.assign({}, gameDetailDiv)}/>
-                <div style={Object.assign({} , diceDiv)}>
+                <div style={Object.assign({}, gameDetailDiv)}>
+                    <List>
+                        {this.state.users.map((item , i) => {
+                            if (item.avatar != null) {
+                                return <ListItem onClick={() => {
+                                    this.props.addHelpingUserToState(item);
+                                    this.props.showDialog(SHOW_PROFILE_DIALOG)
+                                }}
+                                                 leftAvatar={<Avatar size={40} src={item.avatar._url}/>}
+                                                 primaryText={item.firstName + " " + item.lastName}
+                                                 // secondaryText={item.score}
+                                                 secondaryText={this.state.userPositions[i]}
+                                />
+                            }
+                        })}
+                    </List>
+                </div>
+                <div style={Object.assign({}, diceDiv)}>
                     <ReactDice
                         numDice={1}
                         rollDone={this.throwTas}
@@ -182,7 +193,9 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = function (dispatch) {
     return bindActionCreators({
-        addUserToState
-    } , dispatch);
+        addUserToState,
+        addHelpingUserToState,
+        showDialog,
+    }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GamePage);

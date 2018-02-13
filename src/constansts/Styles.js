@@ -76,25 +76,28 @@ export const divGamePage = {
 
 export const gameMapDiv = {
     backgroundImage: "url(" + MapPageBackground + ")",
-    height: window.innerHeight * 0.7,
-    width: window.innerWidth * 0.8,
+    height: window.innerHeight * 0.75,
+    width: window.innerWidth * 0.6,
+    left: window.innerWidth * 0.05,
     backgroundSize: "cover",
-    position: "relative",
+    position: "absolute",
     margin: "0",
-    display: "inline-block"
+    // display: "inline-block",
+    boxShadow: "5px 5px 20px #79CBB2",
 };
 
 export const gameDetailDiv = {
-    height: window.innerHeight * 0.7,
-    width: window.innerWidth * 0.2,
+    height: window.innerHeight * 0.75,
+    width: window.innerWidth * 0.25,
+    left: window.innerWidth * 0.7,
     backgroundSize: "cover",
-    position: "relative",
+    position: "absolute",
     margin: "0",
-    display: "inline-block",
+    // display: "inline-block",
 };
 
 export const diceDiv = {
     position: "relative",
-    display: "block",
+    top: window.innerHeight * 0.75,
     textAlign: "center",
 };

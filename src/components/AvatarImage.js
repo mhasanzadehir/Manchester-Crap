@@ -17,9 +17,9 @@ class AvatarImage extends Component {
         this.avatarOnClick = this.avatarOnClick.bind(this);
     }
 
-    componentDidUpdate() {
-        console.log("slam");
-    }
+    // componentDidUpdate() {
+        // console.log("slam");
+    // }
 
     avatarOnClick() {
         this.props.addHelpingUserToState(this.props.user);
@@ -27,7 +27,8 @@ class AvatarImage extends Component {
     }
 
     render() {
-        console.log("lalal", this.props.user);
+        //todo fix bug
+        // console.log("la", this.props.user);
         if (!this.props.user) {
             return null;
         }

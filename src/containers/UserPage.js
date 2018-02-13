@@ -27,7 +27,7 @@ class UserPage extends Component {
             isPend: true,
             user: null,
             gameId: null,
-            remindTime: 20,
+            remindTime: 5,
         };
         this.joinNormalGame = this.joinNormalGame.bind(this);
         this.hostNormalGame = this.hostNormalGame.bind(this);
