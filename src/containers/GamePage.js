@@ -41,6 +41,9 @@ class GamePage extends Component {
             userPlayStates: [],
         };
         this.throwTas = this.throwTas.bind(this);
+        for(let i = 0; i <= 50; i++){
+            map.set(i, {x : i, y: i});
+        }
         // map.set(0, {x: 35, y: 10});
         // map.set(1, {x: 35, y: 10});
         // map.set(2, {x: 35, y: 10});
@@ -137,6 +140,7 @@ class GamePage extends Component {
                 <div style={Object.assign({}, divMainPageBlurBackground(40))}/>
                 <div style={Object.assign({} , gameMapDiv)}>
                     {this.state.users.map((item, i) => {
+                        console.log("Render Called!!! " + i);
                         let userPosition = map.get(this.state.userPositions[i]);
                         let posX, posY = 0;
                         if (userPosition !== undefined) {
