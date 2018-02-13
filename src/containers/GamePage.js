@@ -36,52 +36,33 @@ class GamePage extends Component {
             userPlayStates: [],
         };
         this.throwTas = this.throwTas.bind(this);
-        for (let i = 0; i <= 50; i++) {
-            map.set(i, {x: i, y: i});
+
+        const pos0 = {x : 595, y : 713};
+        const pos1 = {x : 465, y : 755};
+        const pos2 = {x : 384, y : 774};
+        const pos3 = {x : 279, y : 778};
+        const pos4 = {x : 197, y : 730};
+        const pos5 = {x : 195, y : 654};
+        const pos6 = {x : 293, y : 604};
+        const pos7 = {x : 384, y : 604};
+        const pos8 = {x : 472, y : 604};
+        const pos9 = {x : 562, y : 610};
+        const pos10 = {x : 644, y : 629};
+        const pos11 = {x : 732, y : 635};
+        const pos12 = {x : 824, y : 646};
+        const pos13 = {x : 908, y : 646};
+        const pos14 = {x : 992, y : 650};
+        const pos15 = {x : 1082, y : 631};
+        const pos16 = {x : 1181, y : 598};
+        const pos17 = {x : 1231, y : 537};
+        const pos18 = {x : 1181, y : 453};
+        const pos19 = {x : 1107, y : 423};
+        const pos20 = {x : 1017, y : 402};
+        const mapPositions = {pos0, pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9, pos10,
+            pos11, pos12, pos13, pos14, pos15, pos16, pos17, pos18, pos19, pos20};
+        for(let i = 0; i <= mapPositions.size; i++){
+            map.set(i, mapPositions[i]);
         }
-        // map.set(0, {x: 35, y: 10});
-        // map.set(1, {x: 35, y: 10});
-        // map.set(2, {x: 35, y: 10});
-        // map.set(3, {x: 35, y: 10});
-        // map.set(4, {x: 35, y: 10});
-        // map.set(5, {x: 35, y: 10});
-        // map.set(6, {x: 35, y: 10});
-        // map.set(7, {x: 35, y: 10});
-        // map.set(8, {x: 35, y: 10});
-        // map.set(9, {x: 35, y: 10});
-        // map.set(10, {x: 35, y: 10});
-        // map.set(11, {x: 35, y: 10});
-        // map.set(12, {x: 50, y: 10});
-        // map.set(13, {x: 35, y: 10});
-        // map.set(14, {x: 35, y: 10});
-        // map.set(15, {x: 35, y: 10});
-        // map.set(16, {x: 35, y: 10});
-        // map.set(17, {x: 35, y: 10});
-        // map.set(18, {x: 60, y: 10});
-        // map.set(19, {x: 35, y: 10});
-        // map.set(20, {x: 35, y: 10});
-        // map.set(21, {x: 35, y: 10});
-        // map.set(22, {x: 35, y: 10});
-        // map.set(23, {x: 35, y: 10});
-        // map.set(24, {x: 35, y: 10});
-        // map.set(25, {x: 35, y: 10});
-        // map.set(26, {x: 35, y: 10});
-        // map.set(27, {x: 35, y: 10});
-        // map.set(28, {x: 35, y: 10});
-        // map.set(29, {x: 35, y: 10});
-        // map.set(30, {x: 35, y: 10});
-        // map.set(31, {x: 35, y: 10});
-        // map.set(32, {x: 35, y: 10});
-        // map.set(33, {x: 35, y: 10});
-        // map.set(34, {x: 35, y: 10});
-        // map.set(35, {x: 35, y: 10});
-        // map.set(36, {x: 35, y: 10});
-        // map.set(37, {x: 35, y: 10});
-        // map.set(38, {x: 35, y: 10});
-        // map.set(39, {x: 35, y: 10});
-        // map.set(40, {x: 35, y: 10});
-        // map.set(41, {x: 35, y: 10});
-        // map.set(42, {x: 35, y: 10});
     }
 
     componentDidMount() {
@@ -139,8 +120,8 @@ class GamePage extends Component {
                         let userPosition = map.get(this.state.userPositions[i]);
                         let posX, posY = 0;
                         if (userPosition !== undefined) {
-                            posX = userPosition['x'];
-                            posY = userPosition['y'];
+                             posX = +userPosition['x'] / 12.75;
+                             posY = +userPosition['y'] / 84.3;
                         }
                         let avatarStyle = {
                             position: 'absolute',
