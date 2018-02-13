@@ -34,33 +34,36 @@ class GamePage extends Component {
             userIds: [],
             userPositions: [],
             userPlayStates: [],
+            diceFlag: false,
         };
         this.throwTas = this.throwTas.bind(this);
-
-        const pos0 = {x : 595, y : 713};
-        const pos1 = {x : 465, y : 755};
-        const pos2 = {x : 384, y : 774};
-        const pos3 = {x : 279, y : 778};
-        const pos4 = {x : 197, y : 730};
-        const pos5 = {x : 195, y : 654};
-        const pos6 = {x : 293, y : 604};
-        const pos7 = {x : 384, y : 604};
-        const pos8 = {x : 472, y : 604};
-        const pos9 = {x : 562, y : 610};
-        const pos10 = {x : 644, y : 629};
-        const pos11 = {x : 732, y : 635};
-        const pos12 = {x : 824, y : 646};
-        const pos13 = {x : 908, y : 646};
-        const pos14 = {x : 992, y : 650};
-        const pos15 = {x : 1082, y : 631};
-        const pos16 = {x : 1181, y : 598};
-        const pos17 = {x : 1231, y : 537};
-        const pos18 = {x : 1181, y : 453};
-        const pos19 = {x : 1107, y : 423};
-        const pos20 = {x : 1017, y : 402};
-        const mapPositions = {pos0, pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9, pos10,
-            pos11, pos12, pos13, pos14, pos15, pos16, pos17, pos18, pos19, pos20};
-        for(let i = 0; i <= mapPositions.size; i++){
+        this.findTurnIndex = this.findTurnIndex.bind(this);
+        const pos0 = {x: 595, y: 713};
+        const pos1 = {x: 465, y: 755};
+        const pos2 = {x: 384, y: 774};
+        const pos3 = {x: 279, y: 778};
+        const pos4 = {x: 197, y: 730};
+        const pos5 = {x: 195, y: 654};
+        const pos6 = {x: 293, y: 604};
+        const pos7 = {x: 384, y: 604};
+        const pos8 = {x: 472, y: 604};
+        const pos9 = {x: 562, y: 610};
+        const pos10 = {x: 644, y: 629};
+        const pos11 = {x: 732, y: 635};
+        const pos12 = {x: 824, y: 646};
+        const pos13 = {x: 908, y: 646};
+        const pos14 = {x: 992, y: 650};
+        const pos15 = {x: 1082, y: 631};
+        const pos16 = {x: 1181, y: 598};
+        const pos17 = {x: 1231, y: 537};
+        const pos18 = {x: 1181, y: 453};
+        const pos19 = {x: 1107, y: 423};
+        const pos20 = {x: 1017, y: 402};
+        const mapPositions = {
+            pos0, pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9, pos10,
+            pos11, pos12, pos13, pos14, pos15, pos16, pos17, pos18, pos19, pos20
+        };
+        for (let i = 0; i <= mapPositions.size; i++) {
             map.set(i, mapPositions[i]);
         }
     }
@@ -91,12 +94,16 @@ class GamePage extends Component {
         });
     }
 
-    throwTas(rand) {
+    throwTas(rand , index = this.props.index) {
+        if (!this.state.diceFlag) {
+            this.setState({diceFlag: true});
+            return;
+        }
+        console.log(rand);
         query.first({
             success: (game) => {
                 let positions = game.get(USER_POSITIONS);
                 let playStates = game.get(USER_PLAY_STATES);
-                let index = this.props.index;
                 positions[index] += rand;
                 playStates[index] = true;
                 playStates[(index + 1) % playStates.length] = false;
@@ -110,7 +117,20 @@ class GamePage extends Component {
         });
     }
 
+    findTurnIndex() {
+        for (let i = 0; i < this.state.userPlayStates.length ; i++){
+            if (this.state.userPlayStates[i] === false)
+                return i;
+        }
+        return -1;
+    }
+
     render() {
+        let playerUser = this.state.users[this.findTurnIndex()];
+        if (this.props.index === 0 && playerUser !== undefined && playerUser.username === "Bot") {
+            console.log("salam");
+            setTimeout(() => {this.throwTas(Math.floor(Math.random()*6 + 1) , this.findTurnIndex());},2000);
+        }
         return (
             <div style={Object.assign({}, divGamePage)}>
                 <div style={Object.assign({}, divMainPageBlurBackground(40))}/>
@@ -120,8 +140,8 @@ class GamePage extends Component {
                         let userPosition = map.get(this.state.userPositions[i]);
                         let posX, posY = 0;
                         if (userPosition !== undefined) {
-                             posX = +userPosition['x'] / 12.75;
-                             posY = +userPosition['y'] / 84.3;
+                            posX = +userPosition['x'] / 12.75;
+                            posY = +userPosition['y'] / 84.3;
                         }
                         let avatarStyle = {
                             position: 'absolute',
@@ -133,7 +153,7 @@ class GamePage extends Component {
                 </div>
                 <div style={Object.assign({}, gameDetailDiv)}>
                     <List>
-                        {this.state.users.map((item , i) => {
+                        {this.state.users.map((item, i) => {
                             if (item.avatar != null) {
                                 return <ListItem onClick={() => {
                                     this.props.addHelpingUserToState(item);
@@ -141,7 +161,7 @@ class GamePage extends Component {
                                 }}
                                                  leftAvatar={<Avatar size={40} src={item.avatar._url}/>}
                                                  primaryText={item.firstName + " " + item.lastName}
-                                                 // secondaryText={item.score}
+                                    // secondaryText={item.score}
                                                  secondaryText={this.state.userPositions[i]}
                                 />
                             }
@@ -154,7 +174,7 @@ class GamePage extends Component {
                         rollDone={this.throwTas}
                         faceColor={APP_PRIMARY_COLOR}
                         dotColor={'white'}
-                        ref={dice => this.reactDice = dice}
+                        disableIndividual={this.state.userPlayStates[this.props.index]}
                     />
                 </div>
             </div>
