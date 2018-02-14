@@ -40,7 +40,7 @@ class FinishGameDialog extends Component {
         console.log(this.props.helpingUser , this.props.user);
         if (!this.state.flag && this.props.helpingUser !== undefined && this.props.helpingUser !== null){
             this.setState({
-                isWon: this.props.helpingUser.id === this.props.user.id,
+                isWon: this.props.helpingUser.id !== this.props.user.id,
                 flag: true,
             });
         }
