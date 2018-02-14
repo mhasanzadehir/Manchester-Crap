@@ -28,12 +28,12 @@ class FinishGameDialog extends Component {
 
     finishGameHandle() {
         if (this.state.isWon){
-            addScoreToUser(this.props.user.id , 150, this.props.addSnackText , );
+            addScoreToUser(this.props.user.id , 150, this.props.addSnackText);
         }else {
             addScoreToUser(this.props.user.id , 50 , this.props.addSnackText);
         }
         this.props.closeDialog();
-        window.open("/UserPage", "_self");
+        // window.open("/UserPage", "_self");
     }
 
     render() {
