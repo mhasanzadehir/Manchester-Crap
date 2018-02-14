@@ -8,7 +8,7 @@ import {PROFILE_IMAGE_BASE_64} from "../constansts/Base64s";
 
 const APP_ID = "myAppId123456";
 const JAVASCRIPT_KEY = '1xoWtDkxw8oZvX3bzhdTuHU7KZB8SGZD9jWQ2V9p';
-const SERVER_URL = 'http://localhost:8030/wp';
+const SERVER_URL = 'http://173.254.203.235:8030/wp';
 
 //TODO delete all addSnackText
 export function parseInitializer() {
