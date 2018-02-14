@@ -5,25 +5,41 @@ import {
 } from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {addScoreToUser, getUsersForLeaderBoard, parseInitializer, parseSignIn} from "../init/Parse";
+import {addScoreToUser, getUser, getUsersForLeaderBoard, parseInitializer, parseSignIn} from "../init/Parse";
 import {
     Avatar,
     DatePicker, Dialog, FlatButton, List, ListItem, RadioButton, RadioButtonGroup, RaisedButton,
     TextField
 } from "material-ui";
 import PlayerLeaderBoard from "./PlayerLeaderBoard";
-import {FIRST_NAME, LAST_NAME, SCORE} from "../constansts/DBColumn";
+import {
+    FIRST_NAME, IS_END, LAST_NAME, OBJECT_ID, SCORE, USER_IDS, USER_PLAY_STATES,
+    USER_POSITIONS, WINNER
+} from "../constansts/DBColumn";
 import {FINISH_GAME_DIALOG, LEADER_BOARD_DIALOG, SHOW_PROFILE_DIALOG} from "../constansts/AppDetail";
 import {buttonThemeColorStyle} from "../constansts/Styles";
 import AvatarImage from "./AvatarImage";
 
-
+let Parse = parseInitializer();
+const Game = Parse.Object.extend("Game");
+let query = new Parse.Query(Game);
+let subscription;
 class FinishGameDialog extends Component {
     constructor() {
         super();
-        this.state = {isWon: false , flag: false};
+        this.state = {winner: null , flag: false , isWon: false};
         this.finishGameHandle = this.finishGameHandle.bind(this);
 
+    }
+    componentDidMount() {
+        query.equalTo(OBJECT_ID, this.props.gameId);
+        subscription = query.subscribe();
+        subscription.on('update', (object) => {
+            // console.log(object.get(USER_PLAY_STATES));
+            this.setState({
+                winner: object.get(WINNER),
+            })
+        });
     }
 
     finishGameHandle() {
@@ -33,14 +49,14 @@ class FinishGameDialog extends Component {
             addScoreToUser(this.props.user.id , 50 , this.props.addSnackText);
         }
         this.props.closeDialog();
-        // window.open("/UserPage", "_self");
+        window.open("/UserPage", "_self");
     }
 
     render() {
         console.log(this.props.helpingUser , this.props.user);
-        if (!this.state.flag && this.props.helpingUser !== undefined && this.props.helpingUser !== null){
+        if (this.state.winner !== null){
             this.setState({
-                isWon: this.props.helpingUser.id !== this.props.user.id,
+                isWon: this.state.winner === this.props.user.id,
                 flag: true,
             });
         }
@@ -80,6 +96,7 @@ const mapStateToProps = function (state) {
         user: state.user,
         helpingUser: state.helpingUser,
         fetchUsersData: state.pageStatus.fetchUsersData,
+        gameId: state.game.gameId,
     };
 };
 

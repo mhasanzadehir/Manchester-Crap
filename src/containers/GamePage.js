@@ -116,9 +116,9 @@ class GamePage extends Component {
                 if (positions[index] + rand <= 51) {
                     positions[index] += rand;
                     if (positions[index] === 51) {
-                        game.set(IS_END, true);
+                        this.setState({winner: this.state.user[index]});
                         game.set(WINNER, this.state.users[index].id);
-                        this.setState({winner: this.state.user[index]})
+                        game.set(IS_END, true);
                     }
                     positions = GamePage.checkGamePlayer(positions, index);
                 }
@@ -156,7 +156,6 @@ class GamePage extends Component {
 
     render() {
         if (this.state.isEnd) {
-            this.props.addHelpingUserToState(this.state.winner);
             this.props.showDialog(FINISH_GAME_DIALOG);
         }
         let playerUser = this.state.users[this.findTurnIndex()];
