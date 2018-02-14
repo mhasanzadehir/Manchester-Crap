@@ -6,7 +6,7 @@ import {Snackbar} from "material-ui";
 import AppBarSign from "../components/AppBarSign";
 import {
     addHelpingUserToState,
-    addSnackText, addUserToState, closeDialog, closeSnackText, setLeftDrawer, showDialog, signOut
+    addSnackText, addUserToState, closeDialog, closeSnackText, setLeftDrawer, setLoading, showDialog, signOut
 } from "../actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -22,6 +22,7 @@ import ShowProfileDialog from "../components/ShowProfileDialog";
 import {mainDiv} from "../constansts/Styles";
 import {getUser} from "../init/Parse";
 import {addHelpingUserToStateUnsafe} from "../constansts/ActionTypes";
+import LoadingDialog from "../components/LoadingDialog";
 
 
 class App extends Component {
@@ -32,6 +33,7 @@ class App extends Component {
 
     componentDidMount() {
         this.props.closeDialog();
+        this.props.setLoading(false);
         if (!this.props.signed && window.location.pathname !== "/") {
             window.open("/", "_self");
         } else {
@@ -51,6 +53,7 @@ class App extends Component {
                 />
                 <LeftDrawer/>
                 <ShowProfileDialog/>
+                <LoadingDialog/>
                 <Switch>
                     <Route exact path="/" component={MainPage}/>
                     <Route path="/GamePage" component={GamePage}/>
@@ -88,7 +91,7 @@ const mapDispatchToProps = function (dispatch) {
         closeDialog: closeDialog,
         setLeftDrawer: setLeftDrawer,
         signOut: signOut,
-        // setLoading: setLoading,
+        setLoading: setLoading,
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -6,6 +6,8 @@ export const USER_IDS = 'UserIds';
 export const USER_POSITIONS = 'UserPositions';
 export const USER_PLAY_STATES = 'UserPlayStates';
 export const IS_PEND = 'IsPend';
+export const IS_END = 'IsEnd';
+export const WINNER = 'Winner';
 
 export const BOT_ID = "llMI6HnoZo";
 

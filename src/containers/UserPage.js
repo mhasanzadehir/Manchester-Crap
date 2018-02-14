@@ -102,17 +102,17 @@ class UserPage extends Component {
     }
 }
 
-Parse.LiveQuery.on('open', () => {
-    console.log('socket connection established');
-});
-
-Parse.LiveQuery.on('close', () => {
-    console.log('socket connection closed');
-});
-
-Parse.LiveQuery.on('error', (error) => {
-    console.log(error);
-});
+// Parse.LiveQuery.on('open', () => {
+//     console.log('socket connection established');
+// });
+//
+// Parse.LiveQuery.on('close', () => {
+//     console.log('socket connection closed');
+// });
+//
+// Parse.LiveQuery.on('error', (error) => {
+//     console.log(error);
+// });
 
 const mapStateToProps = function (state) {
     return {

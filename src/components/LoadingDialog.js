@@ -12,7 +12,7 @@ import {SCORE} from "../constansts/DBColumn";
 import {WAIT_FOR_JOIN_DIALOG} from "../constansts/AppDetail";
 
 
-class WintForJoinDialog extends Component {
+class LoadingDialog extends Component {
     constructor() {
         super();
         this.state = {
@@ -24,7 +24,7 @@ class WintForJoinDialog extends Component {
         return (
             <Dialog
                 contentStyle={{textAlign: "center", width: "350px"}}
-                title="Waiting for one player to join"
+                title="Loading"
                 autoScrollBodyContent={true}
                 // actions={
                 //     <div>
@@ -38,14 +38,12 @@ class WintForJoinDialog extends Component {
                 //     </div>
                 // }
                 modal={false}
-                open={this.props.dialog === WAIT_FOR_JOIN_DIALOG}
+                open={this.props.loading}
                 // onRequestClose={() => {
                 //     this.props.closeDialog()
                 // }}
             >
                 <CircularProgress size={80} thickness={5} />
-                <br/>
-                <h1>{this.props.remindTime}</h1>
             </Dialog>
 
         );
@@ -58,6 +56,7 @@ const mapStateToProps = function (state) {
         dialog: state.pageStatus.dialog,
         user: state.user,
         fetchUsersData: state.pageStatus.fetchUsersData,
+        loading: state.pageStatus.loading,
     };
 };
 
@@ -71,4 +70,4 @@ const mapDispatchToProps = function (dispatch) {
         setFetchUsersData: setFetchUsersData
     }, dispatch);
 };
-export default connect(mapStateToProps, mapDispatchToProps)(WintForJoinDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingDialog);

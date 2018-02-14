@@ -1,32 +1,33 @@
 import React, {Component} from 'react';
-import {addHelpingUserToState, addUserToState, showDialog} from "../actions";
+import {addHelpingUserToState, addSnackText, addUserToState, showDialog} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {parseInitializer} from "../init/Parse";
 import {
-    AVATAR, BIRTH_DATE, CITY, EMAIL, FIRST_NAME, GENDER, LAST_NAME, OBJECT_ID, SCORE, USER_IDS, USER_NAME,
+    IS_END, OBJECT_ID, USER_IDS,
     USER_PLAY_STATES,
-    USER_POSITIONS
+    USER_POSITIONS, WINNER
 } from "../constansts/DBColumn";
 import ReactDice from 'react-dice-complete'
 import 'react-dice-complete/dist/react-dice-complete.css'
-import {APP_PRIMARY_COLOR, SHOW_PROFILE_DIALOG} from "../constansts/AppDetail";
+import {APP_PRIMARY_COLOR, FINISH_GAME_DIALOG, SHOW_PROFILE_DIALOG} from "../constansts/AppDetail";
 import {Avatar, List, ListItem} from "material-ui";
 import {getUser} from "../init/Parse";
-import Background from "../images/map1.jpg"
 import {
-    diceDiv, divGamePage, divMainPage, divMainPageBlurBackground, gameDetailDiv,
+    diceDiv, divGamePage, divMainPageBlurBackground, gameDetailDiv,
     gameMapDiv
 } from "../constansts/Styles";
 import AvatarImage from "../components/AvatarImage";
+import {mapDetail} from "../constansts/MapDetail";
+import FinishGameDialog from "../components/FinishGameDialog";
 
 let Parse = parseInitializer();
 const Game = Parse.Object.extend("Game");
 let query = new Parse.Query(Game);
 let subscription;
-let gameMap = new Map();
-let snakeMap = new Map();
-let ladderMap = new Map();
+let gameMap = mapDetail.gameMap;
+let snakeMap = mapDetail.snakeMap;
+let ladderMap = mapDetail.ladderMap;
 
 class GamePage extends Component {
     constructor() {
@@ -38,83 +39,12 @@ class GamePage extends Component {
             userPlayStates: [],
             diceFlag: false,
             diceColor: APP_PRIMARY_COLOR,
+            isEnd: false,
+            winner: null,
         };
         this.throwTas = this.throwTas.bind(this);
         this.findTurnIndex = this.findTurnIndex.bind(this);
-        const posStart = {x : 570, y : 698};
-        const pos1 = {x : 430, y : 736};
-        const pos2 = {x : 350, y : 755};
-        const pos3 = {x : 268, y : 751};
-        const pos4 = {x : 159, y : 707};
-        const pos5 = {x : 176, y : 625};
-        const pos6 = {x : 253, y : 581};
-        const pos7 = {x : 350, y : 568};
-        const pos8 = {x : 438, y : 568};
-        const pos9 = {x : 528, y : 579};
-        const pos10 = {x : 621, y : 595};
-        const pos11 = {x : 705, y : 608};
-        const pos12 = {x : 797, y : 612};
-        const pos13 = {x : 887, y : 623};
-        const pos14 = {x : 961, y : 623};
-        const pos15 = {x : 1047, y : 608};
-        const pos16 = {x : 1141, y : 577};
-        const pos17 = {x : 1177, y : 501};
-        const pos18 = {x : 1145, y : 430};
-        const pos19 = {x : 1076, y : 392};
-        const pos20 = {x : 998, y : 367};
-        const pos21 = {x : 896, y : 360};
-        const pos22 = {x : 809, y : 352};
-        const pos23 = {x : 719, y : 365};
-        const pos24 = {x : 642, y : 373};
-        const pos25 = {x : 558, y : 369};
-        const pos26 = {x : 486, y : 333};
-        const pos27 = {x : 398, y : 300};
-        const pos28 = {x : 312, y : 323};
-        const pos29 = {x : 247, y : 279};
-        const pos30 = {x : 300, y : 211};
-        const pos31 = {x : 394, y : 209};
-        const pos32 = {x : 495, y : 207};
-        const pos33 = {x : 579, y : 222};
-        const pos34 = {x : 654, y : 237};
-        const pos35 = {x : 744, y : 253};
-        const pos36 = {x : 826, y : 262};
-        const pos37 = {x : 912, y : 270};
-        const pos38 = {x : 990, y : 264};
-        const pos39 = {x : 1053, y : 239};
-        const pos40 = {x : 1095, y : 174};
-        const pos41 = {x : 1082, y : 111};
-        const pos42 = {x : 1034, y : 60};
-        const pos43 = {x : 952, y : 35};
-        const pos44 = {x : 849, y : 35};
-        const pos45 = {x : 751, y : 35};
-        const pos46 = {x : 625, y : 48};
-        const pos47 = {x : 532, y : 56};
-        const pos48 = {x : 436, y : 56};
-        const pos49 = {x : 344, y : 62};
-        const pos50 = {x : 256, y : 83};
-        const posFinish = {x : 138, y : 90};
-        const mapPositions = [
-             posStart,
-            pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9, pos10,
-            pos11, pos12, pos13, pos14, pos15, pos16, pos17, pos18, pos19, pos20,
-            pos21, pos22, pos23, pos24, pos25, pos26, pos27, pos28, pos29, pos30,
-            pos31, pos32, pos33, pos34, pos35, pos36, pos37, pos38, pos39, pos40,
-            pos41, pos42, pos43, pos44, pos45, pos46, pos47, pos48, pos49, pos50,
-             posFinish
-        ];
-
-        snakeMap.set(29, 5);
-        snakeMap.set(21, 13);
-        snakeMap.set(41, 11);
-        snakeMap.set(47, 34);
-
-        ladderMap.set(10,24);
-        ladderMap.set(19,39);
-        ladderMap.set(35,45);
-
-        for(let i = 0; i < mapPositions.length; i++) {
-            gameMap.set(i, mapPositions[i]);
-        }
+        GamePage.checkGamePlayer = GamePage.checkGamePlayer.bind(this);
     }
 
     componentDidMount() {
@@ -130,7 +60,8 @@ class GamePage extends Component {
                     userIds: userIds,
                     users: users,
                     userPositions: game.get(USER_POSITIONS),
-                    userPlayStates: game.get(USER_PLAY_STATES)
+                    userPlayStates: game.get(USER_PLAY_STATES),
+                    isEnd: game.get(IS_END),
                 })
             }
             ,
@@ -140,34 +71,72 @@ class GamePage extends Component {
         });
         subscription = query.subscribe();
         subscription.on('update', (object) => {
-            console.log(object.get(USER_PLAY_STATES));
+            // console.log(object.get(USER_PLAY_STATES));
             this.setState({
                 userPositions: object.get(USER_POSITIONS),
-                userPlayStates: object.get(USER_PLAY_STATES)
+                userPlayStates: object.get(USER_PLAY_STATES),
+                isEnd: object.get(IS_END),
             })
         });
     }
 
-    throwTas(rand , index = this.props.index) {
+    static checkGamePlayer(positions, index) {
+        let newPositions = [];
+        for (let i = 0; i < positions.length; i++) {
+            if (positions[i] === positions[index] && i !== index) {
+                if (this.state.users[index] !== undefined
+                    && this.state.users[index].username !== "Bot") {
+                    if (this.props.index === i)
+                        this.props.addSnackText("Ops go first of map you kicked by " + this.state.users[index].username);
+                    else {
+                        this.props.addSnackText("You kicked " + this.state.users[i].username)
+                    }
+                }
+                newPositions.push(0);
+            } else {
+                newPositions.push(positions[i]);
+            }
+        }
+        // console.log(positions);
+        // console.log(newPositions);
+        return newPositions;
+    }
+
+    throwTas(rand, index = this.props.index) {
         if (!this.state.diceFlag) {
             this.setState({diceFlag: true});
             return;
         }
-        console.log("DICE IS ROLLING");
+        // console.log("DICE IS ROLLING");
         query.first({
             success: (game) => {
                 let positions = game.get(USER_POSITIONS);
                 let playStates = game.get(USER_PLAY_STATES);
-                positions[index] += rand;
+                // console.log(positions, positions[index], rand);
+                if (positions[index] + rand <= 51) {
+                    positions[index] += rand;
+                    if (positions[index] === 51) {
+                        game.set(IS_END, true);
+                        game.set(WINNER, this.state.users[index].id);
+                        this.setState({winner: this.state.user[index]})
+                    }
+                    positions = GamePage.checkGamePlayer(positions, index);
+                }
+                game.set(USER_POSITIONS, positions);
                 if (snakeMap.get(positions[index]) !== undefined) {
                     positions[index] = snakeMap.get(positions[index])
                 }
                 if (ladderMap.get(positions[index]) !== undefined) {
                     positions[index] = ladderMap.get(positions[index])
                 }
-                playStates[index] = true;
-                playStates[(index + 1) % playStates.length] = false;
-                game.set(USER_POSITIONS, positions);
+                if (rand !== 6) {
+                    playStates[index] = true;
+                    playStates[(index + 1) % playStates.length] = false;
+                }
+                else if (this.state.users[index] !== undefined
+                    && this.state.users[index].username !== "Bot") {
+                    this.props.addSnackText("You are good please toss again")
+                }
                 game.set(USER_PLAY_STATES, playStates);
                 game.save();
             },
@@ -178,7 +147,7 @@ class GamePage extends Component {
     }
 
     findTurnIndex() {
-        for (let i = 0; i < this.state.userPlayStates.length ; i++){
+        for (let i = 0; i < this.state.userPlayStates.length; i++) {
             if (this.state.userPlayStates[i] === false)
                 return i;
         }
@@ -186,12 +155,15 @@ class GamePage extends Component {
     }
 
     render() {
+        if (this.state.isEnd) {
+            this.props.addHelpingUserToState(this.state.winner);
+            this.props.showDialog(FINISH_GAME_DIALOG);
+        }
         let playerUser = this.state.users[this.findTurnIndex()];
         if (this.props.index === 0 && playerUser !== undefined && playerUser.username === "Bot") {
-            console.log("salam");
             setTimeout(() => {
-                this.throwTas(Math.floor(Math.random()*6 + 1) , this.findTurnIndex());
-                },2000);
+                this.throwTas(Math.floor(Math.random() * 6 + 1), this.findTurnIndex());
+            }, 2000);
         }
         return (
             <div style={Object.assign({}, divGamePage)}>
@@ -201,8 +173,8 @@ class GamePage extends Component {
                         let userPosition = gameMap.get(this.state.userPositions[i]);
                         let posX, posY = 0;
                         if (userPosition !== undefined) {
-                             posX = userPosition['x'] / 12.75;
-                             posY = userPosition['y'] / 8.43;
+                            posX = userPosition['x'] / 12.75;
+                            posY = userPosition['y'] / 8.43;
                         }
                         let avatarStyle = {
                             position: 'absolute',
@@ -222,8 +194,7 @@ class GamePage extends Component {
                                 }}
                                                  leftAvatar={<Avatar size={50} src={item.avatar._url}/>}
                                                  primaryText={item.firstName + " " + item.lastName}
-                                    // secondaryText={item.score}
-                                                 secondaryText={this.state.userPositions[i]}
+                                                 secondaryText={item.score}
                                 />
                             }
                         })}
@@ -233,13 +204,14 @@ class GamePage extends Component {
                     <ReactDice
                         numDice={1}
                         rollDone={this.throwTas}
-                        faceColor={!this.state.userPlayStates[this.props.index]?
-                            APP_PRIMARY_COLOR:
+                        faceColor={!this.state.userPlayStates[this.props.index] ?
+                            APP_PRIMARY_COLOR :
                             "#eea865"}
                         dotColor={'white'}
                         disableIndividual={this.state.userPlayStates[this.props.index]}
                     />
                 </div>
+                <FinishGameDialog/>
             </div>
         );
     }
@@ -260,6 +232,7 @@ const mapDispatchToProps = function (dispatch) {
         addUserToState,
         addHelpingUserToState,
         showDialog,
+        addSnackText,
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GamePage);

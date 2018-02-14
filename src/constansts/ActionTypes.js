@@ -142,7 +142,7 @@ export function defaultState() {
             dialog: "",
             signed: false,
             leftDrawer: false,
-            loading: true,
+            loading: false,
             fetchUsersData: false,
             blurBackground: 0,
         }

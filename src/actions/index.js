@@ -2,7 +2,7 @@ import {
     addSnackTextUnsafe, addGameIdToStateUnsafe, addGameIndexToStateUnsafe,
     addUserToStateUnsafe, closeSnackTextUnsafe, showDialogUnsafe,
     closeDialogUnsafe, signInUnsafe, signOutUnsafe, setLeftDrawerUnsafe, setLoadingUnsafe, setFetchUsersDataUnsafe,
-    addHelpingUserToStateUnsafe, setBlurBackgroundUnsafe
+    addHelpingUserToStateUnsafe, setBlurBackgroundUnsafe, setFinishGameDialogTextUnsafe
 } from "../constansts/ActionTypes";
 
 export function addUserToState(user) {
@@ -70,6 +70,7 @@ export function setBlurBackground(blurBackground) {
         dispatch(setBlurBackgroundUnsafe(blurBackground))
     }
 }
+
 
 export function setLoading(state) {
     return function (dispatch) {

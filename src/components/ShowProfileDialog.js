@@ -16,6 +16,9 @@ class ShowProfileDialog extends Component {
     }
 
     render() {
+        if (this.props.user === undefined || this.props.user === null){
+            return null;
+        }
         return (
             <Dialog
                 contentStyle={{textAlign: "center", width: "350px"}}

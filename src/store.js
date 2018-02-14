@@ -68,7 +68,7 @@ if (serializedState != null) {
 } else {
     storedState = defaultState();
 }
-console.log(storedState);
+// console.log(storedState);
 
 const composedEnhancers = compose(
     applyMiddleware(thunk),

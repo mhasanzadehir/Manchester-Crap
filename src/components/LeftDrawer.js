@@ -13,8 +13,8 @@ class LeftDrawer extends Component {
                 open={this.props.leftDrawer}
                 onRequestChange={(state) => {this.props.setLeftDrawer(state)}}
             >
-                <MenuItem onClick={() => {this.props.setLeftDrawer(false)}}>Menu Item</MenuItem>
-                <MenuItem onClick={() => {this.props.setLeftDrawer(false)}}>Menu Item 2</MenuItem>
+                <MenuItem onClick={() => {this.props.setLeftDrawer(false)}}>About</MenuItem>
+                <MenuItem onClick={() => {this.props.setLeftDrawer(false)}}>How to play</MenuItem>
             </Drawer>
         )
     }

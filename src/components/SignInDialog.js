@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {addSnackText, addUserToState, closeDialog, closeSnackText, showDialog, signIn} from "../actions";
+import {addSnackText, addUserToState, closeDialog, closeSnackText, setLoading, showDialog, signIn} from "../actions";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {getUser, parseSignIn} from "../init/Parse";
@@ -31,6 +31,7 @@ class SignInDialog extends Component {
         this.props.addUserToState(getUser(user.id, this.props.addSnackText));
         this.props.closeDialog();
         this.props.signIn();
+        this.props.setLoading(false);
         // this.props.addUserToState(user);
         // this.setState({redirect: true});
         // event.preventDefault();
@@ -69,7 +70,8 @@ class SignInDialog extends Component {
                                 parseSignIn(
                                     this.state,
                                     this.signInSuccess,
-                                    this.props.addSnackText)
+                                    this.props.addSnackText,
+                                    this.props.setLoading)
                             }}
                         />
                     </div>
@@ -115,6 +117,7 @@ const mapDispatchToProps = function (dispatch) {
         closeDialog: closeDialog,
         addUserToState: addUserToState,
         signIn: signIn,
+        setLoading: setLoading
     }, dispatch);
 };
 export default connect(mapStateToProps, mapDispatchToProps)(SignInDialog);

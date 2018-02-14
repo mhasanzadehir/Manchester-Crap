@@ -1,8 +1,8 @@
 import {
     AVATAR,
-    BIRTH_DATE, BOT_ID, CITY, EMAIL, FIRST_NAME, GENDER, IS_PEND, LAST_NAME, OBJECT_ID, PASSWORD, PLAYER, SCORE,
+    BIRTH_DATE, BOT_ID, CITY, EMAIL, FIRST_NAME, GENDER, IS_END, IS_PEND, LAST_NAME, OBJECT_ID, PASSWORD, PLAYER, SCORE,
     USER_IDS,
-    USER_NAME, USER_PLAY_STATES, USER_POSITIONS
+    USER_NAME, USER_PLAY_STATES, USER_POSITIONS, WINNER
 } from "../constansts/DBColumn";
 import {PROFILE_IMAGE_BASE_64} from "../constansts/Base64s";
 
@@ -27,7 +27,8 @@ const Player = Parse.Object.extend("Player");
 const User = Parse.Object.extend("User");
 const Game = Parse.Object.extend("Game");
 
-export function parseSignIn(state, success, addSnackText) {
+export function parseSignIn(state, success, addSnackText, setLoaging) {
+    setLoaging(true);
     Parse.User.logIn(state.username, state.password, {
         success: (user) => {
             addSnackText("You sign in successfully");
@@ -35,11 +36,13 @@ export function parseSignIn(state, success, addSnackText) {
         },
         error: (user, error) => {
             addSnackText(error.message);
+            setLoaging(false);
         }
     });
 }
 
-export function parseSignUp(state, success, addSnackText) {
+export function parseSignUp(state, success, addSnackText, setLoading) {
+    setLoading(true);
     let imageFile = new Parse.File("profileImage.jpg", {base64: PROFILE_IMAGE_BASE_64});
     let user = new Parse.User();
     user.set(USER_NAME, state.username);
@@ -59,6 +62,7 @@ export function parseSignUp(state, success, addSnackText) {
         },
         error: (user, error) => {
             addSnackText(error.message)
+            setLoading(false);
         }
     });
 }
@@ -127,7 +131,7 @@ export function setUserInfo(state, addSnackText) {
             object.set(CITY, state.city);
             object.set(BIRTH_DATE, state.birthDate);
             object.set(GENDER, state.gender);
-            console.log(state.pictures);
+            // console.log(state.pictures);
             object.set(AVATAR, state.pictures);
             object.save();
         }
@@ -151,6 +155,8 @@ export function startNormalGame(hostGame, joinGame, userId, addSnackText) {
                 positions.push(0);
                 playStates.push(true);
                 object.set(IS_PEND, false);
+                object.set(IS_END, false);
+                object.set(WINNER, null);
                 object.set(USER_IDS, ids);
                 object.set(USER_POSITIONS, positions);
                 object.set(USER_PLAY_STATES, playStates);
@@ -219,4 +225,20 @@ export function waitForJoinLiveQuery(gameId, setIsPend) {
     subscription.on('update', (object) => {
         setIsPend(object.get(IS_PEND));
     });
+}
+
+export function addScoreToUser(userId, score, addSnackText) {
+    let query = new Parse.Query(User);
+    query.equalTo(OBJECT_ID, userId);
+    query.first({
+        success: (object) => {
+            // console.log(object);
+            object.set(SCORE, object.get(SCORE) + score);
+            object.save();
+        }
+        ,
+        error: function (error) {
+            addSnackText("Error: " + error.code + " " + error.message);
+        }
+    })
 }
