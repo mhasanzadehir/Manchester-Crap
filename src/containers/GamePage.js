@@ -37,13 +37,10 @@ class GamePage extends Component {
             userPositions: [],
             userPlayStates: [],
             diceFlag: false,
-            diceDisable: false,
             diceColor: APP_PRIMARY_COLOR,
-            botFlag: true,
         };
         this.throwTas = this.throwTas.bind(this);
         this.findTurnIndex = this.findTurnIndex.bind(this);
-        this.diceDivOnCLick = this.diceDivOnCLick.bind(this);
         const posStart = {x : 570, y : 698};
         const pos1 = {x : 430, y : 736};
         const pos2 = {x : 350, y : 755};
@@ -151,10 +148,6 @@ class GamePage extends Component {
         });
     }
 
-    diceDivOnCLick(){
-        this.setState({diceDisable: true})
-    }
-
     throwTas(rand , index = this.props.index) {
         if (!this.state.diceFlag) {
             this.setState({diceFlag: true});
@@ -182,11 +175,9 @@ class GamePage extends Component {
                 alert("Error: " + error.code + " " + error.message);
             }
         });
-        this.setState({diceDisable: false});
     }
 
     findTurnIndex() {
-        console.log(this.state.userPlayStates.length);
         for (let i = 0; i < this.state.userPlayStates.length ; i++){
             if (this.state.userPlayStates[i] === false)
                 return i;
@@ -196,14 +187,11 @@ class GamePage extends Component {
 
     render() {
         let playerUser = this.state.users[this.findTurnIndex()];
-        console.log(playerUser);
-        if (this.state.botFlag && this.props.index === 0 && playerUser !== undefined && playerUser.username === "Bot") {
-            this.throwTas(Math.floor(Math.random()*6 + 1) , this.findTurnIndex());
-            // this.setState({botFlag: false});
-            // console.log("salam");
-            // setTimeout(() => {
-            //     this.setState({botFlag:true});
-            //     },2000);
+        if (this.props.index === 0 && playerUser !== undefined && playerUser.username === "Bot") {
+            console.log("salam");
+            setTimeout(() => {
+                this.throwTas(Math.floor(Math.random()*6 + 1) , this.findTurnIndex());
+                },2000);
         }
         return (
             <div style={Object.assign({}, divGamePage)}>
@@ -241,7 +229,7 @@ class GamePage extends Component {
                         })}
                     </List>
                 </div>
-                <div onClick={this.diceDivOnCLick} style={Object.assign({}, diceDiv)}>
+                <div style={Object.assign({}, diceDiv)}>
                     <ReactDice
                         numDice={1}
                         rollDone={this.throwTas}
@@ -249,7 +237,7 @@ class GamePage extends Component {
                             APP_PRIMARY_COLOR:
                             "#eea865"}
                         dotColor={'white'}
-                        disableIndividual={this.state.diceDisable || this.state.userPlayStates[this.props.index]}
+                        disableIndividual={this.state.userPlayStates[this.props.index]}
                     />
                 </div>
             </div>
